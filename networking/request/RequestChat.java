@@ -65,7 +65,7 @@ public class RequestChat extends GameRequest {
     		// private chat. have to look for the character
     		GameClient targetGameClient = client.getServer().getThreadByPlayerUserName(receiverName);
 			ResponseChat response = new ResponseChat();    		
-    		if (targetGameClient != null && targetGameClient.getGamestate() == Constants.GAMESTATE_PLAYING){
+    		if (targetGameClient != null && targetGameClient.getGamestate() == Constants.GAMESTATE_GAME_PLAYING){
     			// target character is online. add chat response to him/her
     			response.setPrivateChat(client.getPlayer().getUsername(), receiverName, chatMsg);
     			targetGameClient.addResponseForUpdate(response);

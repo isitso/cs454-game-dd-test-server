@@ -42,6 +42,11 @@ public class GameServer {
 																						// by
 																						// player
 																						// ID
+	private HashMap<Long, GameClient> lobbyClients = new HashMap<Long, GameClient>();
+
+	private HashMap<Long, GameMode> games = new HashMap<Long, GameMode>();
+
+	private HashMap<String, String> accounts = new HashMap<String, String>();
 
 	/**
 	 * Initialize the GameServer by setting up the request types and creating a
@@ -151,16 +156,15 @@ public class GameServer {
 	 *            holds the username
 	 * @return the GameClient thread
 	 */
-	
-	public GameClient getThreadByPlayerUserName(String userName) { for
-		(GameClient aClient : activeThreads.values()) { 
-			if (aClient.getPlayer().getUsername().equals(userName)) { 
-				return aClient; 
+
+	public GameClient getThreadByPlayerUserName(String userName) {
+		for (GameClient aClient : activeThreads.values()) {
+			if (aClient.getPlayer().getUsername().equals(userName)) {
+				return aClient;
 			}
 		}
-	 	return null; 
-	 }
-	 
+		return null;
+	}
 
 	/**
 	 * Get the GameClient thread for the player using character name
@@ -172,7 +176,8 @@ public class GameServer {
 	public GameClient getThreadByCharacterName(String characterName) {
 		// loop through the list of threads and look for the character
 		for (GameClient client : activeThreads.values()) {
-			if (client.getPlayer().getCharacter().getName().equalsIgnoreCase(characterName))
+			if (client.getPlayer().getCharacter().getName()
+					.equalsIgnoreCase(characterName))
 				return client;
 		}
 		// if cannot find the character return null
@@ -186,7 +191,6 @@ public class GameServer {
 	public void addToActiveThreads(GameClient client) {
 		activeThreads.put(client.getId(), client);
 	}
-
 
 	public ArrayList<Player> getActivePlayers() {
 		return new ArrayList<Player>(activePlayers.values());
@@ -203,8 +207,6 @@ public class GameServer {
 	public void removeActivePlayer(int player_id) {
 		activePlayers.remove(player_id);
 	}
-
-	
 
 	public void deletePlayerThreadOutOfActiveThreads(Long threadID) {
 		activeThreads.remove(threadID);
@@ -253,14 +255,149 @@ public class GameServer {
 	public void addResponseForAllOnlinePlayers(long player_id,
 			GameResponse response) {
 		for (GameClient client : activeThreads.values()) {
-			if (client.getId() != player_id && client.getGamestate() == Constants.GAMESTATE_PLAYING) {
+			if (client.getId() != player_id
+					&& client.getGamestate() == Constants.GAMESTATE_GAME_PLAYING) {
 				client.addResponseForUpdate(response);
 			}
 		}
 	}
 
+	/**
+	 * create a game. can be dd or rr
+	 * 
+	 * @param gameMode
+	 */
+	public void createGame(int gameMode) {
+		if (gameMode == 0) {
+			GameMode game = new DemolitionDerbyGame(this);
+			synchronized (games) {
+				games.put(game.getId(), game);
+			}
+		}
+	}
+
+	/**
+	 * move client from lobby to game
+	 * 
+	 * @param client
+	 * @param game
+	 */
+	public void addClientToGame(GameClient client, GameMode game) {
+		try {
+			game.addClient(client.getId(), client);
+			client.setGame(game);
+			synchronized (lobbyClients) {
+				lobbyClients.remove(client.getId());
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * remove client from the game
+	 * 
+	 * @param id
+	 * @param game
+	 */
+	public void removeClientFromGame(long id, GameMode game) {
+		try {
+			game.removeClient(id);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	/** move client from game to lobby after finish the game
+	 * 
+	 * @param id
+	 * @param game
+	 */
+	public void moveClientFromGameToLobby(long id, GameMode game) {
+		try {
+			GameClient client = game.getClientList().get(id);
+			game.removeClient(id);
+			synchronized(lobbyClients){
+				lobbyClients.put(client.getId(), client);
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * start the game with id = ?
+	 * 
+	 * @return
+	 */
+
+	public void startGame(long id) {
+		GameMode game = null;
+		if ((game = games.get(id)) != null) {
+			game.startGame();
+		}
+	}
+
+	/**
+	 * Abort a game with id = ?
+	 * 
+	 * @return
+	 */
+	public void abortGame(long id) {
+	}
+
+	/**
+	 * move client from activethreads to lobby list "logged in"
+	 * 
+	 * @param client
+	 */
+	public void addClientToLobby(GameClient client) {
+		synchronized (lobbyClients) {
+			lobbyClients.put(client.getId(), client);
+		}
+		synchronized (activeThreads) {
+			activeThreads.remove(client.getId());
+		}
+	}
+
+	public void removeClientFromLobby(long id) {
+		synchronized (lobbyClients) {
+			lobbyClients.remove(id);
+		}
+	}
+
+	public void generateAccounts() {
+		accounts.put("test", "test");
+		accounts.put("1", "1");
+	}
+
+	/**
+	 * populate account list
+	 * 
+	 * @return
+	 */
 	public static GameServer getInstance() {
 		return gameServer;
+	}
+
+	/**
+	 * check if username & password match one of accounts
+	 * 
+	 * @param username
+	 * @param password
+	 * @return
+	 */
+	public int checkAccount(String username, String password) {
+		String pwd = null;
+		if ((pwd = accounts.get(username)) == null) {
+			return Constants.ERROR_ACCOUNT_NOT_FOUND;
+		} else if (!pwd.equalsIgnoreCase(password)) {
+			return Constants.ERROR_WRONG_PASSWORD;
+		}
+		return Constants.LOGIN_SUCCESS;
 	}
 
 	public static void main(String args[]) throws SQLException {

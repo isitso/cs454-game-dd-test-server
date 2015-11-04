@@ -37,31 +37,30 @@ public class RequestCreateAccount extends GameRequest {
 	public void doBusiness() throws Exception {
 		ResponseCreateAccount response = new ResponseCreateAccount();
 		try {
-			// open connection to DB
-			makeConnectionToDB();
-
-			// query for account with that username
-			String sql = "SELECT * FROM user WHERE username = ?;";
-			PreparedStatement pstmt = c.prepareStatement(sql);
-			pstmt.setString(1, username);
-			ResultSet rs = pstmt.executeQuery();
-			
-			if (rs.next()){
-				// account already exists
-				response.setRegistrationFail(Constants.REGISTRATION_ACCOUNT_ALREADY_EXIST);
-			}else {
-				// account does not exist. create new account
-				sql = "INSERT INTO user(username, password, is_online) VALUES(?, ?, 0);";
-				pstmt = c.prepareStatement(sql);
-				pstmt.setString(1, username);
-				pstmt.setString(2, pwd);
-				pstmt.execute();
-				response.setRegistrationSuccess();
-				
-			}
+//			// open connection to DB
+//			makeConnectionToDB();
+//
+//			// query for account with that username
+//			String sql = "SELECT * FROM user WHERE username = ?;";
+//			PreparedStatement pstmt = c.prepareStatement(sql);
+//			pstmt.setString(1, username);
+//			ResultSet rs = pstmt.executeQuery();
+//			
+//			if (rs.next()){
+//				// account already exists
+//				response.setRegistrationFail(Constants.REGISTRATION_ACCOUNT_ALREADY_EXIST);
+//			}else {
+//				// account does not exist. create new account
+//				sql = "INSERT INTO user(username, password, is_online) VALUES(?, ?, 0);";
+//				pstmt = c.prepareStatement(sql);
+//				pstmt.setString(1, username);
+//				pstmt.setString(2, pwd);
+//				pstmt.execute();
+//				response.setRegistrationSuccess();
+//				
+//			}
 			// add response to the list
 			responses.add(response);
-			closeConnectionToDB();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

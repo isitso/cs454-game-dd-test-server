@@ -46,7 +46,7 @@ public class GameClient extends Thread {
 	private Queue<GameResponse> updates; // Temporarily store responses for
 											// client
 	private int gamestate; // keep track of client's gamestate
-	Connection c;
+	private GameMode game;
 
 	/**
 	 * Initialize the GameClient using the client socket and creating both input
@@ -69,7 +69,6 @@ public class GameClient extends Thread {
 		dataInputStream = new DataInputStream(inputStream);
 		gamestate = Constants.GAMESTATE_NOT_LOGGED_IN;
 		player = new Player();
-		c = null;
 	}
 
 	/**
@@ -83,109 +82,85 @@ public class GameClient extends Thread {
 	 * activity is picked up from the client such as being disconnected.
 	 */
 	@Override
-    public void run() {
-        isPlaying = true;
-        long lastActivity = System.currentTimeMillis();
-        short requestCode = -1;
+	public void run() {
+		isPlaying = true;
+		long lastActivity = System.currentTimeMillis();
+		short requestCode = -1;
 
-        while (isPlaying) {
-            try {
-                // Extract the size of the package from the data stream
-                short requestLength = DataReader.readShort(dataInputStream);
+		while (isPlaying) {
+			try {
+				// Extract the size of the package from the data stream
+				short requestLength = DataReader.readShort(dataInputStream);
 
-                if (requestLength > 0) {
-                    lastActivity = System.currentTimeMillis();
-                    // Separate the remaining package from the data stream
-                    byte[] buffer = new byte[requestLength];
-                    inputStream.read(buffer, 0, requestLength);
-                    dataInput = new DataInputStream(new ByteArrayInputStream(buffer));
-                    // Extract the request code number
-                    requestCode = DataReader.readShort(dataInput);
-                    // Determine the type of request
-                    GameRequest request = GameRequestTable.get(requestCode);
-                    // If the request exists, process like following:
-                    if (request != null) {
-                    	request.setGameClient(this);
-                        // Pass input stream to the request object
-                        request.setDataInputStream(dataInput);
-                        // Parse the input stream
-                        request.parse();
-                        // Interpret the data
-                        request.doBusiness();
-                        if (Constants.DEBUG && requestCode != Constants.C_HEARTBEAT)
-                    		System.out.println(request);
-                        // Retrieve any responses created by the request object
-                        for (GameResponse response : request.getResponses()) {
-                            // Transform the response into bytes and pass it into the output stream
-                            //outputStream.write(response.constructResponseInBytes());
-                        	updates.add(response);
-                        }
-                    }
-                } else {
-                    // If there was no activity for the last moments, exit loop
-                    if ((System.currentTimeMillis() - lastActivity) / 1000 >= Constants.TIMEOUT_SECONDS) {
-                        isPlaying = false;
-                    }
-                }
-            } catch (Exception e) {
-                System.err.println("Request [" + requestCode + "] Error:");
-                System.err.println(e.getMessage());
-                System.err.println("---");
-                e.printStackTrace();
-            }
-        }
+				if (requestLength > 0) {
+					lastActivity = System.currentTimeMillis();
+					// Separate the remaining package from the data stream
+					byte[] buffer = new byte[requestLength];
+					inputStream.read(buffer, 0, requestLength);
+					dataInput = new DataInputStream(new ByteArrayInputStream(
+							buffer));
+					// Extract the request code number
+					requestCode = DataReader.readShort(dataInput);
+					// Determine the type of request
+					GameRequest request = GameRequestTable.get(requestCode);
+					// If the request exists, process like following:
+					if (request != null) {
+						request.setGameClient(this);
+						// Pass input stream to the request object
+						request.setDataInputStream(dataInput);
+						// Parse the input stream
+						request.parse();
+						// Interpret the data
+						request.doBusiness();
+						if (Constants.DEBUG
+								&& requestCode != Constants.C_HEARTBEAT)
+							System.out.println(request);
+						// Retrieve any responses created by the request object
+						for (GameResponse response : request.getResponses()) {
+							// Transform the response into bytes and pass it
+							// into the output stream
+							// outputStream.write(response.constructResponseInBytes());
+							updates.add(response);
+						}
+					}
+				} else {
+					// If there was no activity for the last moments, exit loop
+					if ((System.currentTimeMillis() - lastActivity) / 1000 >= Constants.TIMEOUT_SECONDS) {
+						isPlaying = false;
+					}
+				}
+			} catch (Exception e) {
+				System.err.println("Request [" + requestCode + "] Error:");
+				System.err.println(e.getMessage());
+				System.err.println("---");
+				e.printStackTrace();
+			}
+		}
 
-        System.out.println(new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(new Date()));
-        System.out.println("The client stops playing.");
+		System.out.println(new SimpleDateFormat("MM/dd/yyyy HH:mm:ss")
+				.format(new Date()));
+		System.out.println("The client stops playing.");
 
-        try{
-            flushResponses();// flush everything left over
-        }catch (Exception e){
-        	e.printStackTrace();
-        }
-        if (gamestate != Constants.GAMESTATE_NOT_LOGGED_IN){
-	        // update database
-        	openConnectionToDB();
-        	String sql = "";
-        	PreparedStatement pstmt = null;
-        	try {
-		        if (gamestate == Constants.GAMESTATE_PLAYING){
-		        	// Update character
-		        	sql = "UPDATE character SET char_x = ?, char_y = ?, char_z = ?, char_h = ?, char_p = ?, char_z = ? WHERE id = ?;)";
-		        	pstmt = c.prepareStatement(sql);
-		    		pstmt.setFloat(1, getPlayer().getCharacter().getX());
-		    		pstmt.setFloat(2, getPlayer().getCharacter().getY());
-		    		pstmt.setFloat(3, getPlayer().getCharacter().getZ());
-		    		pstmt.setFloat(4, getPlayer().getCharacter().getH());
-		    		pstmt.setFloat(5, getPlayer().getCharacter().getP());
-		    		pstmt.setFloat(6, getPlayer().getCharacter().getR());
-		    		pstmt.setInt(7, getPlayer().getCharacter().getId());
-		        	pstmt.executeUpdate();
-		        	// remove from server's online list
-		        	server.removeActivePlayer(player.getId());
-		        }
-		        // do log out.
-		    	sql = "UPDATE user SET is_online = 0 WHERE id = ?";
-		    	if (Constants.DEBUG){
-		    		System.out.printf("Disconnect user_id = %d", player.getId());
-		    	}
-		    	
-		        pstmt = c.prepareStatement(sql);
-		    	pstmt.setInt(1, player.getId());
-		    	pstmt.executeUpdate();
-		    	closeConnectionToDB();
-		    	
-		    	// let others know that this client logged out
-        		ResponsePlayerLogout otherResponse = new ResponsePlayerLogout();
-        		otherResponse.setCharacterID(getPlayer().getCharacter().getId());
-        		getServer().addResponseForAllOnlinePlayers(getId(), otherResponse);
-		    } catch (Exception e){
+		try {
+			flushResponses();// flush everything left over
+		} catch (Exception e) {
 			e.printStackTrace();
-		    }
-        }
-        // Remove this GameClient from the server
-        server.deletePlayerThreadOutOfActiveThreads(getId());
-    }
+		}
+		if (gamestate != Constants.GAMESTATE_NOT_LOGGED_IN) {
+			try {
+				// let others know that this client logged out
+				ResponsePlayerLogout otherResponse = new ResponsePlayerLogout();
+				otherResponse
+						.setCharacterID(getPlayer().getCharacter().getId());
+				getServer().addResponseForAllOnlinePlayers(getId(),
+						otherResponse);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		// Remove this GameClient from the server
+		server.deletePlayerThreadOutOfActiveThreads(getId());
+	}
 
 	public void stopClient() {
 		isPlaying = false;
@@ -285,27 +260,13 @@ public class GameClient extends Thread {
 	public void setGamestate(int gamestate) {
 		this.gamestate = gamestate;
 	}
-	/**
-	 * Close connection to the database
-	 */
-	public void closeConnectionToDB(){
-		try {
-			if ((c != null) && c.isValid(0))
-				c.close();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+
+	public GameMode getGame() {
+		return game;
 	}
-	/**
-	 * Open connection to the database
-	 */
-	public void openConnectionToDB(){
-		try {
-			Class.forName("org.sqlite.JDBC");
-			c = DriverManager.getConnection("jdbc:sqlite:hw2.db");
-		} catch (Exception e) {
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-		}		
+
+	public void setGame(GameMode game) {
+		this.game = game;
 	}
+
 }

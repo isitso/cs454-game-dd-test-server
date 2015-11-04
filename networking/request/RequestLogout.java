@@ -33,7 +33,7 @@ public class RequestLogout extends GameRequest {
      */
     @Override
     public void doBusiness() throws Exception {
-    	if (client.getGamestate() == Constants.GAMESTATE_PLAYING){
+    	if (client.getGamestate() == Constants.GAMESTATE_GAME_PLAYING){
         	ResponseLogout response = new ResponseLogout();
     		try {
     			// let other clients know that this one has logged out

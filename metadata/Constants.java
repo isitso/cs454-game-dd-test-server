@@ -43,9 +43,9 @@ public class Constants {
     // Login flags
     public static final int LOGIN_FAIL = 0;
     public static final int LOGIN_SUCCESS = 1;
-    public static final int ERROR_ACCOUNT_NOT_FOUND = 0;
-    public static final int ERROR_WRONG_PASSWORD = 1;
-    public static final int ERROR_ACCOUNT_IS_IN_USE = 2;
+    public static final int ERROR_ACCOUNT_NOT_FOUND = 2;
+    public static final int ERROR_WRONG_PASSWORD = 3;
+    public static final int ERROR_ACCOUNT_IS_IN_USE = 4;
     
     // Chat flags
     public static final int CHAT_GLOBAL = 0;
@@ -75,8 +75,12 @@ public class Constants {
     
     // Gamestates
     public static final int GAMESTATE_NOT_LOGGED_IN = 0;
-    public static final int GAMESTATE_LOGGED_IN = 1;
-    public static final int GAMESTATE_PLAYING = 2;
+    public static final int GAMESTATE_LOBBY = 1;
+    public static final int GAMESTATE_GAME_WAITING = 2;
+    public static final int GAMESTATE_GAME_COUNTDOWN = 3;
+    public static final int GAMESTATE_GAME_PLAYING = 4;
+    public static final int GAMESTATE_GAME_FINISHED = 5;
+    public static final int GAMESTATE_LOADING = 9;
     // DEBUG
     public static final boolean DEBUG = true;
 }
