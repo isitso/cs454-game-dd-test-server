@@ -42,7 +42,7 @@ public class GameClient extends Thread {
 	private DataInputStream dataInputStream; // For use with incoming requests
 	private DataInputStream dataInput;
 	private Player player;
-	private boolean isPlaying;
+	protected boolean isPlaying;
 	private Queue<GameResponse> updates; // Temporarily store responses for
 											// client
 	private int gamestate; // keep track of client's gamestate
