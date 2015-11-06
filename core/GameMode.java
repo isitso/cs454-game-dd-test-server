@@ -12,10 +12,22 @@ public abstract class GameMode extends Thread {
 	protected boolean isRunning;
 	protected GameServer server;
 	
+	/** Start the game (dd or rr)
+	 * 
+	 */
 	public abstract void startGame();
 	
+	/** End the game (dd or rr)
+	 * 
+	 */
 	public abstract void endGame();
 	
+	/** Add client to the list of this game object
+	 * 
+	 * @param id
+	 * @param client
+	 * @throws Exception
+	 */
 	public void addClient(long id, GameClient client) throws Exception {
 		synchronized (clientList){
 			if (clientList.size() >= MAX_PLAYER_COUNT)
@@ -24,6 +36,11 @@ public abstract class GameMode extends Thread {
 		}
 	}
 	
+	/** RemoveClient from the list of game object
+	 * 
+	 * @param id
+	 * @throws Exception
+	 */
 	public void removeClient(long id) throws Exception {
 		synchronized (clientList){
 			if (!clientList.containsKey(id))
