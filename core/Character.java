@@ -9,6 +9,7 @@ public class Character {
 	int id;
 	int typeId;	// determine which model to use
 	String name;
+	int health;
 	float x, y, z, h, p, r;	// xyz is for position. hpr is for hpr
 	
 	// Getters and setters
@@ -98,5 +99,28 @@ public class Character {
 	public void setPosHpr(float x, float y, float z, float h, float p, float r){
 		setPos(x, y, z);
 		setHpr(h, p, r);
+	}
+	public int getHealth() {
+		return health;
+	}
+	public void setHealth(int health) {
+		this.health = health;
+	}
+	
+	/** calculate the remain health by decreasing x amount 
+	 * 
+	 * @param damage
+	 * @return remaining health
+	 */
+	public int takeDamage(int damage){
+		return health = ((health - damage) > 0) ? health - damage : 0;
+	}
+	
+	/** check if character is dead or not
+	 * 
+	 * @return true if health > 0. false otherwise
+	 */
+	public boolean isDead(){
+		return health <= 0;
 	}
 }

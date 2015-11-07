@@ -2,9 +2,11 @@ package core;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.Random;
 
 import metadata.Constants;
 
@@ -218,9 +220,15 @@ public class FakeGameClient extends GameClient{
 	/** Randomly pick one of the simulation
 	 * Do not care about logical error
 	 * do not care about gamestate.
-	 * WARNING: only use this when the client keeps track of gamestate
+	 * WARNING: only use this when the client keeps track of gamestate or 
+	 * some kind of packet validation
+	 * @throws InvocationTargetException 
+	 * @throws IllegalArgumentException 
+	 * @throws IllegalAccessException 
 	 */
-	public void simulateRandomWithError(){
+	public void simulateRandomWithError() throws IllegalAccessException, IllegalArgumentException, InvocationTargetException{
+		Random random = new Random();
+		methods.get(random.nextInt() % methods.size()).invoke(null);
 	}
 	
 	/** Randomly pick one of the simulation
@@ -273,6 +281,25 @@ public class FakeGameClient extends GameClient{
 		GameMode gm = getServer().createGame(1);
 		getServer().addClientToGame(this, gm);
 		// generate response here
+	}
+	
+	/** simulate collision. report the damage done on another player
+	 * 
+	 */
+	public void simulateCollision(){
+		int damage = 1;
+		ArrayList<Character> characterList = new ArrayList<Character>();
+		for (Player player: getGame().getPlayers()){
+			if (player.getCharacter().getId() != getPlayer().getCharacter().getId())
+				characterList.add(player.getCharacter());
+		}
+		if (characterList.size() >= 1){
+			// car collision should only happen when there are 2 cars or more
+			Random random = new Random();
+			int targetId = random.nextInt() % characterList.size();
+			// generate response here
+			
+		}
 	}
 	
 	@Override

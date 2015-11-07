@@ -1,13 +1,17 @@
 package core;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+
+import networking.response.GameResponse;
 
 public abstract class GameMode extends Thread {
 	/**
 	 * Abstract class for game mode
 	 */
 	
-	protected HashMap<Long, GameClient> clientList = new HashMap<Long, GameClient>();
+	protected HashMap<Long, GameClient> clients = new HashMap<Long, GameClient>();
+	protected HashMap<Long, Player> players = new HashMap<Long, Player>();
 	public final static int MAX_PLAYER_COUNT = 10;
 	protected boolean isRunning;
 	protected GameServer server;
@@ -29,10 +33,10 @@ public abstract class GameMode extends Thread {
 	 * @throws Exception
 	 */
 	public void addClient(long id, GameClient client) throws Exception {
-		synchronized (clientList){
-			if (clientList.size() >= MAX_PLAYER_COUNT)
+		synchronized (clients){
+			if (clients.size() >= MAX_PLAYER_COUNT)
 				throw new Exception("Game is full.");
-			clientList.put(id, client);
+			clients.put(id, client);
 		}
 	}
 	
@@ -42,19 +46,19 @@ public abstract class GameMode extends Thread {
 	 * @throws Exception
 	 */
 	public void removeClient(long id) throws Exception {
-		synchronized (clientList){
-			if (!clientList.containsKey(id))
+		synchronized (clients){
+			if (!clients.containsKey(id))
 				throw new Exception("Client not found.");
-			clientList.remove(id);
+			clients.remove(id);
 		}
 	}
 
-	public HashMap<Long, GameClient> getClientList() {
-		return clientList;
+	public HashMap<Long, GameClient> getClients() {
+		return clients;
 	}
 
-	public void setClientList(HashMap<Long, GameClient> clientList) {
-		this.clientList = clientList;
+	public void setClients(HashMap<Long, GameClient> clients) {
+		this.clients = clients;
 	}
 
 	public boolean isRunning() {
@@ -64,5 +68,22 @@ public abstract class GameMode extends Thread {
 	public void setRunning(boolean isRunning) {
 		this.isRunning = isRunning;
 	}
+	
+	/** add a response for all client in the game
+	 * 
+	 * @param response
+	 */
+	public void addResponseForAllClients(GameResponse response){
+		for (GameClient client: clients.values()){
+			client.addResponseForUpdate(response);
+		}
+	}
 
+	public ArrayList<Player> getPlayers(){
+		return new ArrayList<Player>(players.values());
+	}
+	
+	public GameClient getClient(long id){
+		return clients.get(id);
+	}
 }

@@ -332,13 +332,12 @@ public class GameServer {
 	 */
 	public void moveClientFromGameToLobby(long id, GameMode game) {
 		try {
-			GameClient client = game.getClientList().get(id);
+			GameClient client = game.getClient(id);
 			game.removeClient(id);
 			synchronized(lobbyClients){
 				lobbyClients.put(client.getId(), client);
 			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
