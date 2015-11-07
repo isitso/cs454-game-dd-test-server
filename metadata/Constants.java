@@ -85,4 +85,9 @@ public class Constants {
     // DEBUG
     public static final boolean DEBUG = true;
     
+    // SIMULATION
+    public static final float SIMULATION_PLAYER_MAX_SPEED = 0.001f;
+    public static final int SIMULATION_DELAY = 5000; // miliseconds
+    public static final boolean SIMULATION_AUTO_LOGOUT = false;
+    public static final boolean SIMULATION_AUTO_QUIT_GAME = false;
 }
