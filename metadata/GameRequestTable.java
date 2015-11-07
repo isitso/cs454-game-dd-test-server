@@ -31,11 +31,6 @@ public class GameRequestTable {
         add(Constants.C_MOVE, "RequestMove");
         add(Constants.C_CHAT, "RequestChat");
         add(Constants.C_HEARTBEAT, "RequestHeartbeat");
-//        add(Constants.CMSG_SAVE_EXIT_GAME, "RequestExitGame");
-        add(Constants.RAND_INT, "RequestInt");
-        add(Constants.RAND_STRING, "RequestString");
-        add(Constants.RAND_SHORT, "RequestShort");
-        add(Constants.RAND_FLOAT, "RequestFloat");
     }
 
     /**

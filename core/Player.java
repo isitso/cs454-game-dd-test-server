@@ -10,7 +10,6 @@ public class Player {
 	int id;	// account id
 	
 	public Player() {
-		// TODO Auto-generated constructor stub
 		character = new Character();
 	}
 	// Getters and Setters
@@ -32,4 +31,6 @@ public class Player {
 	public void setId(int id) {
 		this.id = id;
 	}
+	
+	
 }

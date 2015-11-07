@@ -391,12 +391,14 @@ public class GameServer {
 	 * @return
 	 */
 	public int checkAccount(String username, String password) {
-		String pwd = null;
-		if ((pwd = accounts.get(username)) == null) {
-			return Constants.ERROR_ACCOUNT_NOT_FOUND;
-		} else if (!pwd.equalsIgnoreCase(password)) {
-			return Constants.ERROR_WRONG_PASSWORD;
-		}
+//		String pwd = null;
+//		if ((pwd = accounts.get(username)) == null) {
+//			return Constants.ERROR_ACCOUNT_NOT_FOUND;
+//		} else if (!pwd.equalsIgnoreCase(password)) {
+//			return Constants.ERROR_WRONG_PASSWORD;
+//		}
+		// For testing purpose, just let the client log in
+		accounts.put(username, password);
 		return Constants.LOGIN_SUCCESS;
 	}
 

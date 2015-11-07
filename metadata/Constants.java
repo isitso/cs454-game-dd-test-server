@@ -81,6 +81,8 @@ public class Constants {
     public static final int GAMESTATE_GAME_PLAYING = 4;
     public static final int GAMESTATE_GAME_FINISHED = 5;
     public static final int GAMESTATE_LOADING = 9;
+    
     // DEBUG
     public static final boolean DEBUG = true;
+    
 }

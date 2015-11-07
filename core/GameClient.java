@@ -112,15 +112,16 @@ public class GameClient extends Thread {
 						request.parse();
 						// Interpret the data
 						request.doBusiness();
-						if (Constants.DEBUG
-								&& requestCode != Constants.C_HEARTBEAT)
+						if (Constants.DEBUG && requestCode != Constants.C_HEARTBEAT)
 							System.out.println(request);
 						// Retrieve any responses created by the request object
-						for (GameResponse response : request.getResponses()) {
-							// Transform the response into bytes and pass it
-							// into the output stream
-							// outputStream.write(response.constructResponseInBytes());
-							updates.add(response);
+						if ((gamestate == Constants.GAMESTATE_NOT_LOGGED_IN) || (requestCode == Constants.C_HEARTBEAT))
+							flushResponses();
+						else {
+							for (GameResponse response : request.getResponses()) {
+								// The client is already logged in. Save responses till next Heartbeat
+								updates.add(response);
+							}
 						}
 					}
 				} else {
@@ -141,23 +142,6 @@ public class GameClient extends Thread {
 				.format(new Date()));
 		System.out.println("The client stops playing.");
 
-		try {
-			flushResponses();// flush everything left over
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		if (gamestate != Constants.GAMESTATE_NOT_LOGGED_IN) {
-			try {
-				// let others know that this client logged out
-				ResponsePlayerLogout otherResponse = new ResponsePlayerLogout();
-				otherResponse
-						.setCharacterID(getPlayer().getCharacter().getId());
-				getServer().addResponseForAllOnlinePlayers(getId(),
-						otherResponse);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
 		// Remove this GameClient from the server
 		server.deletePlayerThreadOutOfActiveThreads(getId());
 	}
@@ -221,7 +205,6 @@ public class GameClient extends Thread {
 			try {
 				outputStream.write(response.constructResponseInBytes());
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -269,4 +252,12 @@ public class GameClient extends Thread {
 		this.game = game;
 	}
 
+	/** check if this GameClient is real or not
+	 * 
+	 * @return false
+	 */
+	public boolean isRealClient(){
+		return true;
+	}
+	
 }

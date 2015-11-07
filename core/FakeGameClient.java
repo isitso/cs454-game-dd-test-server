@@ -6,10 +6,10 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 import networking.response.GameResponse;
+import networking.response.ResponseLogout;
 
 public class FakeGameClient extends GameClient{
-	/** This class will be used to simulate gameclient
-	 * 
+	/** This class will be used to simulate GameClient
 	 */
 	
 	/** Constructor
@@ -30,7 +30,8 @@ public class FakeGameClient extends GameClient{
 	public void run(){
 		while (isPlaying){
 			try {
-				// player's simulating should go inside this method
+				// player's simulating should go inside this scope
+				
 				this.sleep(1);	// this should let cpu 'rest' a bit
 			} catch (InterruptedException e) {
 				e.printStackTrace();
@@ -81,26 +82,74 @@ public class FakeGameClient extends GameClient{
 	 * Should this be in the FakeGameClient or FakePlayer?
 	 * Since we will have to remove this object from the list
 	 */
-	public void simulateLogout(){}
+	public GameResponse simulateLogout(){
+		return new ResponseLogout();
+	}
 	
 	/** Simulate player join the game in the lobby
 	 * When joining the game from the lobby, player stay there until
 	 * server tell client to load the game
 	 */
-	public void simulateJoinGame(){};
+	public GameResponse simulateJoinGame(){
+		return new ResponseLogout();
+	};
 	
 	/** Simulate player quit game(demolition derby, not the actual game)
 	 *  
 	 */
-	public void simulateQuitGame(){};
+	public GameResponse simulateQuitGame(){
+		return new ResponseLogout();
+	};
 	
 	/** Randomly move around
 	 * 
 	 */
-	public void simulateRandomMove(){}
+	public GameResponse simulateRandomMove(){
+		return new ResponseLogout();
+	}
 
 	/** Move around, but not randomly
 	 * it can be any pattern
 	 */
-	public void simulateScriptedMove(){}
+	public GameResponse simulateScriptedMove(){
+		return new ResponseLogout();
+	}
+	
+	/** Simulate chat
+	 * 
+	 */
+	public GameResponse simulateChat(){
+		return new ResponseLogout();
+	}
+	
+	/** Simulate power up
+	 * 
+	 */
+	public GameResponse simulatePowerUp(){
+		return new ResponseLogout();
+	}
+	
+	/** Simulate picking up power item
+	 * 
+	 */
+	public GameResponse simulatePowerPickup(){
+		return new ResponseLogout();
+	}
+	
+	/** Randomly pick one of the simulation
+	 * Do not care about logical error
+	 * @return
+	 */
+	public GameResponse simulateRandomWithError(){
+		return new ResponseLogout();
+	}
+	
+	/** Randomly pick one of the simulation
+	 * Avoid logical error as much as possible
+	 * @return
+	 */
+	public GameResponse simulateRandomWithoutError(){
+		return new ResponseLogout();		
+	}
+	
 }

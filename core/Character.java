@@ -85,4 +85,18 @@ public class Character {
 		this.p = p;
 		this.r = r;
 	}
+	
+	/** set position and hpr at the same time
+	 * 
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @param h
+	 * @param p
+	 * @param r
+	 */
+	public void setPosHpr(float x, float y, float z, float h, float p, float r){
+		setPos(x, y, z);
+		setHpr(h, p, r);
+	}
 }
