@@ -3611,3 +3611,4 @@
 bin/core/GameMode.class
 cmd/CommandServer.java
 cmd/CommandClient.java
+*.class

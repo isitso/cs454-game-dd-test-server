@@ -178,6 +178,7 @@ public class FakeGameClient extends GameClient{
 	 * server tell client to load the game
 	 */
 	public void simulateJoinGame(){
+		
 	};
 	
 	/** Simulate player quit game(demolition derby, not the actual game)
@@ -190,6 +191,11 @@ public class FakeGameClient extends GameClient{
 	 * 
 	 */
 	public void simulateRandomMove(){
+		Random random = new Random();
+		float x = random.nextFloat() * Constants.SIMULATION_PLAYER_MAX_SPEED;
+		float y = random.nextFloat() * Constants.SIMULATION_PLAYER_MAX_SPEED;
+		getPlayer().getCharacter().setPos(x, y, getPlayer().getCharacter().getZ());
+		// generate response here
 	}
 
 	/** Move around, but not randomly
@@ -202,13 +208,22 @@ public class FakeGameClient extends GameClient{
 	 * 
 	 */
 	public void simulateChat(){
-		
+		// generate chat here
 	}
 	
 	/** Simulate power up
 	 * 
 	 */
 	public void simulatePowerUp(){
+		// for now just pick up powerId 1
+		if (getPlayer().getCharacter().hasPowerUp(1)) {
+			try {
+				getPlayer().getCharacter().usePowerUp(1);
+				// generate response here
+			} catch (Exception e) {
+				e.printStackTrace();
+			}			
+		}
 	}
 	
 	/** Simulate picking up power item
@@ -228,7 +243,7 @@ public class FakeGameClient extends GameClient{
 	 */
 	public void simulateRandomWithError() throws IllegalAccessException, IllegalArgumentException, InvocationTargetException{
 		Random random = new Random();
-		methods.get(random.nextInt() % methods.size()).invoke(null);
+		methods.get(random.nextInt() % methods.size()).invoke(this);
 	}
 	
 	/** Randomly pick one of the simulation
@@ -237,28 +252,38 @@ public class FakeGameClient extends GameClient{
 	 * all methods inside should add a response to the response queue to broadcase later
 	 */
 	public void simulateRandomWithoutError(){
-		switch (getGamestate()){
-		case Constants.GAMESTATE_NOT_LOGGED_IN:
-			// not logged in yet. log in now
-			simulateLogin();
-			break;
-		case Constants.GAMESTATE_LOBBY:
-			// in lobby. can do: chat, create game, join game, log out
-			break;
-		case Constants.GAMESTATE_GAME_WAITING:
-			// waiting in game lobby. can do: chat, (leave game? no protocol yet), log out
-			break;
-		case Constants.GAMESTATE_GAME_COUNTDOWN:
-			// finished load game and ready to start. can do: chat, (leave game? no protocol yet), log out
-			break;
-		case Constants.GAMESTATE_GAME_PLAYING:
-			// game is on. can do: chat, move, (leave game? no protocol yet), log out, power up, pick power item, dead
-			break;
-		case Constants.GAMESTATE_GAME_FINISHED:
-			// game over. can do: chat, back to lobby, move, log out
-			break;
-		default:
-			break;
+		Random random = new Random();
+		try {
+			switch (getGamestate()){
+			case Constants.GAMESTATE_NOT_LOGGED_IN:
+				// not logged in yet. log in now
+				simulateLogin();
+				break;
+			case Constants.GAMESTATE_LOBBY:
+				// in lobby. can do: chat, create game, join game, log out
+				lobbyMethods.get(random.nextInt() % lobbyMethods.size()).invoke(this);
+				break;
+			case Constants.GAMESTATE_GAME_WAITING:
+				// waiting in game lobby. can do: chat, (leave game? no protocol yet), log out
+				gameLobbyMethods.get(random.nextInt() % gameLobbyMethods.size()).invoke(this);
+				break;
+			case Constants.GAMESTATE_GAME_COUNTDOWN:
+				// finished load game and ready to start. can do: chat, (leave game? no protocol yet), log out
+				gameCountdownMethods.get(random.nextInt() % gameCountdownMethods.size()).invoke(this);
+				break;
+			case Constants.GAMESTATE_GAME_PLAYING:
+				// game is on. can do: chat, move, (leave game? no protocol yet), log out, power up, pick power item, dead
+				gamePlayingMethods.get(random.nextInt() % gamePlayingMethods.size()).invoke(this);
+				break;
+			case Constants.GAMESTATE_GAME_FINISHED:
+				// game over. can do: chat, back to lobby, move, log out
+				gameFinishedMethods.get(random.nextInt() % gameFinishedMethods.size()).invoke(this);
+				break;
+			default:
+				break;
+			}
+		}catch (Exception e){
+			e.printStackTrace();
 		}
 	}
 	
@@ -266,6 +291,9 @@ public class FakeGameClient extends GameClient{
 	 * @return
 	 */
 	public void simulateDead(){
+		if (getPlayer().getCharacter().isDead()){
+			//generate response here
+		}
 	}
 	
 	/** simulate player ready for game

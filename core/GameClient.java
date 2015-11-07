@@ -117,14 +117,12 @@ public class GameClient extends Thread {
 						if (Constants.DEBUG && requestCode != Constants.C_HEARTBEAT)
 							System.out.println(request);
 						// Retrieve any responses created by the request object
+						for (GameResponse response : request.getResponses()) {
+							// The client is already logged in. Save responses till next Heartbeat
+							updates.add(response);
+						}
 						if ((gamestate == Constants.GAMESTATE_NOT_LOGGED_IN) || (requestCode == Constants.C_HEARTBEAT))
 							flushResponses();
-						else {
-							for (GameResponse response : request.getResponses()) {
-								// The client is already logged in. Save responses till next Heartbeat
-								updates.add(response);
-							}
-						}
 					}
 				} else {
 					// If there was no activity for the last moments, exit loop
@@ -132,6 +130,7 @@ public class GameClient extends Thread {
 						isPlaying = false;
 					}
 				}
+				Thread.sleep(1);	// reduce cpu load
 			} catch (Exception e) {
 				System.err.println("Request [" + requestCode + "] Error:");
 				System.err.println(e.getMessage());

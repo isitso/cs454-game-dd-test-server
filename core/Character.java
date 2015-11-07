@@ -1,5 +1,7 @@
 package core;
 
+import java.util.HashMap;
+
 public class Character {
 	/**
 	 * Character class hold data for one character in the game
@@ -11,6 +13,7 @@ public class Character {
 	String name;
 	int health;
 	float x, y, z, h, p, r;	// xyz is for position. hpr is for hpr
+	HashMap<Integer, Integer> powerMap = new HashMap<Integer, Integer>();
 	
 	// Getters and setters
 	public int getId() {
@@ -122,5 +125,40 @@ public class Character {
 	 */
 	public boolean isDead(){
 		return health <= 0;
+	}
+	
+	/** pick up power up. either add new one or increase count
+	 * 
+	 */
+	public void pickPowerUp(int powerId, int count){
+		if (!powerMap.containsKey(powerId)){
+			powerMap.put(powerId, count);
+		}else {
+			count += powerMap.get(powerId);
+			powerMap.put(powerId, count);
+		}
+	}
+	
+	/** use power up
+	 * 
+	 */
+	public void usePowerUp(int powerId) throws Exception{
+		if (!powerMap.containsKey(powerId))
+			throw new Exception("Power map doesn't have power item [" + powerId + "]");
+		if (powerMap.get(powerId) > 0)
+			powerMap.put(powerId, powerMap.get(powerId) - 1);
+	}
+	
+	public HashMap<Integer, Integer> getPowerMap(){
+		return powerMap;
+	}
+	
+	/** check if character has a power up item or not
+	 * 
+	 * @param powerId
+	 * @return
+	 */
+	public boolean hasPowerUp(int powerId){
+		return powerMap.containsKey(powerId) && powerMap.get(powerId) > 0;
 	}
 }
