@@ -93,4 +93,8 @@ public class Constants {
     public static final int SIMULATION_LOBBY_DELAY = 5; //seconds
     public static final int SIMULATION_GAME_LOBBY_DELAY = 5;
     public static final int SIMULATION_GAME_DELAY = 3;
+    
+    // GAME MODE
+    public static final int GAMEMODE_DD = 0;
+    public static final int GAMEMODE_RR = 1;
 }

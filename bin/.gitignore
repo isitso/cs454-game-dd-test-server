@@ -3611,16 +3611,7 @@
 bin/core/GameMode.class
 cmd/CommandServer.java
 cmd/CommandClient.java
-/core/
-/core/
-/core/
-/networking/
-/networking/
-/networking/
-/networking/
-/networking/
-/networking/
-/networking/
+*.class
 /core/
 /core/
 /core/
@@ -3635,6 +3626,7 @@ cmd/CommandClient.java
 /core/
 /core/
 /core/
+/metadata/
 /core/
 /core/
 /core/

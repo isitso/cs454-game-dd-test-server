@@ -23,12 +23,12 @@ public class FakeGameClient extends GameClient{
 	 */
 	private long lastActivity;
 	// Method maps to be randomized on
-	HashMap<Integer, Method> methods = new HashMap<Integer, Method>();
-	HashMap<Integer, Method> lobbyMethods = new HashMap<Integer, Method>();
-	HashMap<Integer, Method> gameLobbyMethods = new HashMap<Integer, Method>();
-	HashMap<Integer, Method> gameCountdownMethods = new HashMap<Integer, Method>();
-	HashMap<Integer, Method> gamePlayingMethods = new HashMap<Integer, Method>();
-	HashMap<Integer, Method> gameFinishedMethods = new HashMap<Integer, Method>();
+	ArrayList<Method> methods = new ArrayList<Method>();
+	ArrayList<Integer> lobbyMethodIndexes = new ArrayList<Integer>();
+	ArrayList<Integer> gameLobbyMethodIndexes = new ArrayList<Integer>();
+	ArrayList<Integer> gameCountdownMethodIndexes = new ArrayList<Integer>();
+	ArrayList<Integer> gamePlayingMethodIndexes = new ArrayList<Integer>();
+	ArrayList<Integer> gameFinishedMethodIndexes = new ArrayList<Integer>();
 	
 	Queue<GameResponse> responses = new LinkedList<GameResponse>();	// store response to broadcast
 	
@@ -43,50 +43,51 @@ public class FakeGameClient extends GameClient{
 	public FakeGameClient(GameServer server) throws IOException, NoSuchMethodException, SecurityException{
 		super(null, server);
 		// generate method maps
-		methods.put(1, FakeGameClient.class.getMethod("simulateLogin"));
-		methods.put(2, FakeGameClient.class.getMethod("simulateChat"));
-		methods.put(3, FakeGameClient.class.getMethod("simulateJoinGame"));
-		methods.put(4, FakeGameClient.class.getMethod("simulateLogout"));
-		methods.put(5, FakeGameClient.class.getMethod("simulatePowerPickup"));
-		methods.put(6, FakeGameClient.class.getMethod("simulatePowerUp"));
-		methods.put(7, FakeGameClient.class.getMethod("simulateQuitGame"));
-		methods.put(8, FakeGameClient.class.getMethod("simulateRandomMove"));
-		methods.put(9, FakeGameClient.class.getMethod("simulateReady"));
-		methods.put(10, FakeGameClient.class.getMethod("simulateDead"));
-		methods.put(11, FakeGameClient.class.getMethod("simulateCreateGame"));
-		//methods.put(1, FakeGameClient.class.getMethod("simulateScriptedMove"));
+		methods.add(FakeGameClient.class.getMethod("simulateLogin", null));	//0
+		methods.add(FakeGameClient.class.getMethod("simulateChat", null));	//1
+		methods.add(FakeGameClient.class.getMethod("simulateJoinGame", null));	//2
+		methods.add(FakeGameClient.class.getMethod("simulateLogout", null));	//3
+		methods.add(FakeGameClient.class.getMethod("simulatePowerPickup", null));	//4
+		methods.add(FakeGameClient.class.getMethod("simulatePowerUp", null));	//5
+		methods.add(FakeGameClient.class.getMethod("simulateQuitGame", null));	//6
+		methods.add(FakeGameClient.class.getMethod("simulateRandomMove", null));	//7
+		methods.add(FakeGameClient.class.getMethod("simulateReady", null));	//8
+		methods.add(FakeGameClient.class.getMethod("simulateDead", null));	//9
+		methods.add(FakeGameClient.class.getMethod("simulateCreateGame", null));	//10
+		//methods.add(FakeGameClient.class.getMethod("simulateScriptedMove", null));	//11
 		
 		// just logged in. strolling in lobby
-		lobbyMethods.put(1, FakeGameClient.class.getMethod("simulateChat"));
-		lobbyMethods.put(2, FakeGameClient.class.getMethod("simulateCreateGame"));
-		lobbyMethods.put(3, FakeGameClient.class.getMethod("simulateJoinGame"));
+		lobbyMethodIndexes.add(1);	//chat
+		lobbyMethodIndexes.add(10);	// create game
+		lobbyMethodIndexes.add(2);	// join game
 		if (Constants.SIMULATION_AUTO_LOGOUT)
-			lobbyMethods.put(4, FakeGameClient.class.getMethod("simulateLogout"));
+			lobbyMethodIndexes.add(3);	// log out
+
 		
-		// inside game lobby. waiting for 
-		gameLobbyMethods.put(1, FakeGameClient.class.getMethod("simulateChat"));
+		// inside game lobby. waiting for
+		gameLobbyMethodIndexes.add(1);	// chat
 		if (Constants.SIMULATION_AUTO_LOGOUT)
-			gameLobbyMethods.put(2, FakeGameClient.class.getMethod("simulateLogout"));
+			gameLobbyMethodIndexes.add(3);
 		
 		// finished loading game (waiting for count down)
-		gameCountdownMethods.put(1, FakeGameClient.class.getMethod("simulateChat"));
+		gameCountdownMethodIndexes.add(1);	// chat
 		if (Constants.SIMULATION_AUTO_LOGOUT)
-			gameCountdownMethods.put(2, FakeGameClient.class.getMethod("simulateLogout"));
+			gameCountdownMethodIndexes.add(3);
 		
 		// game is on. can do: chat, move, (leave game? no protocol yet), log out, power up, pick power item, dead
-		gamePlayingMethods.put(1, FakeGameClient.class.getMethod("simulateChat"));
-		gamePlayingMethods.put(2, FakeGameClient.class.getMethod("simulateRandomMove"));
-		gamePlayingMethods.put(3, FakeGameClient.class.getMethod("simulatePowerUp"));
-		gamePlayingMethods.put(4, FakeGameClient.class.getMethod("simulatePowerPickup"));
-		gamePlayingMethods.put(5, FakeGameClient.class.getMethod("simulateDead"));
+		gamePlayingMethodIndexes.add(1);	// chat
+		gamePlayingMethodIndexes.add(7);	// random move
+		gamePlayingMethodIndexes.add(4);	// power pick up
+		gamePlayingMethodIndexes.add(5);	// power up
+		gamePlayingMethodIndexes.add(9);
 		if (Constants.SIMULATION_AUTO_LOGOUT)
-			gamePlayingMethods.put(1, FakeGameClient.class.getMethod("simulateLogout"));
+			gamePlayingMethodIndexes.add(3);
 		
 		// game over. can do: chat, back to lobby, move, log out
-		gameFinishedMethods.put(1, FakeGameClient.class.getMethod("simulateChat"));
-		gameFinishedMethods.put(2, FakeGameClient.class.getMethod("simulateRandomMove"));
+		gameFinishedMethodIndexes.add(1);	// chat
+		gameFinishedMethodIndexes.add(7);	// random move
 		if (Constants.SIMULATION_AUTO_LOGOUT)
-			gameFinishedMethods.put(3, FakeGameClient.class.getMethod("simulateLogout"));
+		gameFinishedMethodIndexes.add(3);
 
 		getPlayer().setId(100 + (int)getId());
 		getPlayer().setUsername("FakeUser" + getPlayer().getId());
@@ -103,7 +104,7 @@ public class FakeGameClient extends GameClient{
 		while (isPlaying){
 			try {
 				// player's simulating should go inside this scope
-				if (System.currentTimeMillis() - lastActivity > Constants.SIMULATION_LOBBY_DELAY){
+				if (System.currentTimeMillis() - lastActivity > Constants.SIMULATION_LOBBY_DELAY * 1000){
 					simulateRandomWithoutError();
 					lastActivity = System.currentTimeMillis();
 				}
@@ -261,23 +262,23 @@ public class FakeGameClient extends GameClient{
 				break;
 			case Constants.GAMESTATE_LOBBY:
 				// in lobby. can do: chat, create game, join game, log out
-				lobbyMethods.get(random.nextInt() % lobbyMethods.size()).invoke(this);
+				methods.get(lobbyMethodIndexes.get(random.nextInt() % lobbyMethodIndexes.size())).invoke(this);
 				break;
 			case Constants.GAMESTATE_GAME_WAITING:
 				// waiting in game lobby. can do: chat, (leave game? no protocol yet), log out
-				gameLobbyMethods.get(random.nextInt() % gameLobbyMethods.size()).invoke(this);
+				methods.get(gameLobbyMethodIndexes.get(random.nextInt() % gameLobbyMethodIndexes.size())).invoke(this);
 				break;
 			case Constants.GAMESTATE_GAME_COUNTDOWN:
 				// finished load game and ready to start. can do: chat, (leave game? no protocol yet), log out
-				gameCountdownMethods.get(random.nextInt() % gameCountdownMethods.size()).invoke(this);
+				methods.get(gameCountdownMethodIndexes.get(random.nextInt() % gameCountdownMethodIndexes.size())).invoke(this);
 				break;
 			case Constants.GAMESTATE_GAME_PLAYING:
 				// game is on. can do: chat, move, (leave game? no protocol yet), log out, power up, pick power item, dead
-				gamePlayingMethods.get(random.nextInt() % gamePlayingMethods.size()).invoke(this);
+				methods.get(gamePlayingMethodIndexes.get(random.nextInt() % gamePlayingMethodIndexes.size())).invoke(this);
 				break;
 			case Constants.GAMESTATE_GAME_FINISHED:
 				// game over. can do: chat, back to lobby, move, log out
-				gameFinishedMethods.get(random.nextInt() % gameFinishedMethods.size()).invoke(this);
+				methods.get(gameFinishedMethodIndexes.get(random.nextInt() % gameFinishedMethodIndexes.size())).invoke(this);
 				break;
 			default:
 				break;
@@ -306,7 +307,7 @@ public class FakeGameClient extends GameClient{
 	 * 
 	 */
 	public void simulateCreateGame(){
-		GameMode gm = getServer().createGame(1);
+		GameMode gm = getServer().createGame(Constants.GAMEMODE_DD);
 		getServer().addClientToGame(this, gm);
 		// generate response here
 	}

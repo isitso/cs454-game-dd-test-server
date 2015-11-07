@@ -279,9 +279,9 @@ public class GameServer {
 	 * @param gameMode
 	 */
 	public GameMode createGame(int gameMode) {
-		if (gameMode == 0) {
+		if (gameMode == Constants.GAMEMODE_DD) {
 			GameMode game = new DemolitionDerbyGame(this);
-			System.out.printf("Created game with id=[%d]\n", game.getId());
+			System.out.printf("Created game [%d]\n", game.getId());
 			synchronized (games) {
 				games.put(game.getId(), game);
 			}
@@ -334,9 +334,7 @@ public class GameServer {
 		try {
 			GameClient client = game.getClient(id);
 			game.removeClient(id);
-			synchronized(lobbyClients){
-				lobbyClients.put(client.getId(), client);
-			}
+			addClientToLobby(client);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -372,15 +370,17 @@ public class GameServer {
 		synchronized (lobbyClients) {
 			lobbyClients.put(client.getId(), client);
 		}
-		synchronized (activeThreads) {
-			activeThreads.remove(client.getId());
-		}
+		System.out.printf("Add client [%d:%s] to lobby\n", client.getId(), client.getPlayer().getUsername());
+//		synchronized (activeThreads) {
+//			activeThreads.remove(client.getId());
+//		}
 	}
 
 	public void removeClientFromLobby(long id) {
 		synchronized (lobbyClients) {
 			lobbyClients.remove(id);
 		}
+		System.out.printf("Remove client [%d:%s] from lobby\n", id, lobbyClients.get(id).getPlayer().getUsername());
 	}
 
 	public void generateAccounts() {
@@ -426,13 +426,10 @@ public class GameServer {
 			System.out.printf("Added a fake client with [%d:%s]\n", fgc.getId(), fgc.getPlayer().getUsername());
 			fgc.start();
 		} catch (NoSuchMethodException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (SecurityException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (Exception e){
 			e.printStackTrace();
