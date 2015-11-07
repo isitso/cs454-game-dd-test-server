@@ -12,6 +12,7 @@ import java.lang.reflect.*;
 import networking.response.GameResponse;
 import networking.response.ResponseLogin;
 import networking.response.ResponseLogout;
+import networking.response.ResponsePlayerLogout;
 
 public class FakeGameClient extends GameClient{
 	/** This class will be used to simulate GameClient
@@ -84,14 +85,20 @@ public class FakeGameClient extends GameClient{
 		gameFinishedMethods.put(2, FakeGameClient.class.getMethod("simulateRandomMove"));
 		if (Constants.SIMULATION_AUTO_LOGOUT)
 			gameFinishedMethods.put(3, FakeGameClient.class.getMethod("simulateLogout"));
+		
+		System.out.println("Set id and username for fake player");
+		getPlayer().setId(100 + (int)getId());
+		getPlayer().setUsername("FakeUser" + getPlayer().getId());
 	}
 	
 	/**
 	 * Simulate player's actions
 	 * socket reading/sending is not needed
 	 */
-	@Override
+	//@Override
 	public void run(){
+		isPlaying = true;
+		System.out.println("Inside fake client's run()");
 		while (isPlaying){
 			try {
 				// player's simulating should go inside this scope
@@ -101,7 +108,7 @@ public class FakeGameClient extends GameClient{
 				
 				// have a response to broadcast to other real players
 				// do it here
-			} catch (InterruptedException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
@@ -149,6 +156,10 @@ public class FakeGameClient extends GameClient{
 	 * @return
 	 */
 	public void simulateLogin(){
+		getServer().addClientToLobby(this);
+		setGamestate(Constants.GAMESTATE_LOBBY);
+		// need to generate player login notice for other players
+		System.out.printf("Fake client with id = %d logged in\n", this.getId());
 	}
 	/** Simulate player logout
 	 * Should this be in the FakeGameClient or FakePlayer?

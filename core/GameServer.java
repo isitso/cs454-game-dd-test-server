@@ -110,7 +110,7 @@ public class GameServer {
 		timer.schedule(new TimerTask(){
 			@Override
 			public void run(){
-				addFakeGameClient();
+				addFakeGameClient();				
 			}
 		}, 5000);
 		
@@ -421,6 +421,7 @@ public class GameServer {
 			FakeGameClient fgc = new FakeGameClient(this);
 			activeThreads.put(fgc.getId(), fgc);	// add to list
 			System.out.printf("Added a fake client with id = %d\n", fgc.getId());
+			fgc.start();
 		} catch (NoSuchMethodException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
