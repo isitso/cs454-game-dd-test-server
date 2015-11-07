@@ -19,7 +19,7 @@ public class FakeGameClient extends GameClient{
 	 * NOTE: gamestate and player are not directly accessible from this class
 	 * must use getters/setters to access
 	 */
-	
+	private long lastActivity;
 	// Method maps to be randomized on
 	HashMap<Integer, Method> methods = new HashMap<Integer, Method>();
 	HashMap<Integer, Method> lobbyMethods = new HashMap<Integer, Method>();
@@ -85,8 +85,7 @@ public class FakeGameClient extends GameClient{
 		gameFinishedMethods.put(2, FakeGameClient.class.getMethod("simulateRandomMove"));
 		if (Constants.SIMULATION_AUTO_LOGOUT)
 			gameFinishedMethods.put(3, FakeGameClient.class.getMethod("simulateLogout"));
-		
-		System.out.println("Set id and username for fake player");
+
 		getPlayer().setId(100 + (int)getId());
 		getPlayer().setUsername("FakeUser" + getPlayer().getId());
 	}
@@ -98,11 +97,14 @@ public class FakeGameClient extends GameClient{
 	//@Override
 	public void run(){
 		isPlaying = true;
-		System.out.println("Inside fake client's run()");
+		lastActivity = System.currentTimeMillis();
 		while (isPlaying){
 			try {
 				// player's simulating should go inside this scope
-				simulateRandomWithoutError();
+				if (System.currentTimeMillis() - lastActivity > Constants.SIMULATION_LOBBY_DELAY){
+					simulateRandomWithoutError();
+					lastActivity = System.currentTimeMillis();
+				}
 				//simulateRandomWithError();
 				this.sleep(1);	// this should let cpu 'rest' a bit
 				
@@ -158,8 +160,9 @@ public class FakeGameClient extends GameClient{
 	public void simulateLogin(){
 		getServer().addClientToLobby(this);
 		setGamestate(Constants.GAMESTATE_LOBBY);
+		System.out.printf("Fake client [%d:%s] logged in\n", getId(), getPlayer().getUsername());
+		lastActivity = System.currentTimeMillis();
 		// need to generate player login notice for other players
-		System.out.printf("Fake client with id = %d logged in\n", this.getId());
 	}
 	/** Simulate player logout
 	 * Should this be in the FakeGameClient or FakePlayer?
@@ -197,6 +200,7 @@ public class FakeGameClient extends GameClient{
 	 * 
 	 */
 	public void simulateChat(){
+		
 	}
 	
 	/** Simulate power up
@@ -266,5 +270,13 @@ public class FakeGameClient extends GameClient{
 	 * 
 	 */
 	public void simulateCreateGame(){
+		GameMode gm = getServer().createGame(1);
+		getServer().addClientToGame(this, gm);
+		// generate response here
+	}
+	
+	@Override
+	public String toString(){
+		return "FakeGameClient [" + getId() + "]";
 	}
 }

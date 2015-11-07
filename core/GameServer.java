@@ -278,13 +278,16 @@ public class GameServer {
 	 * 
 	 * @param gameMode
 	 */
-	public void createGame(int gameMode) {
+	public GameMode createGame(int gameMode) {
 		if (gameMode == 0) {
 			GameMode game = new DemolitionDerbyGame(this);
+			System.out.printf("Created game with id=[%d]\n", game.getId());
 			synchronized (games) {
 				games.put(game.getId(), game);
 			}
+			return game;
 		}
+		return null;
 	}
 
 	/**
@@ -297,11 +300,12 @@ public class GameServer {
 		try {
 			game.addClient(client.getId(), client);
 			client.setGame(game);
+			client.setGamestate(Constants.GAMESTATE_GAME_WAITING);
 			synchronized (lobbyClients) {
 				lobbyClients.remove(client.getId());
 			}
+			System.out.printf("Added client [%s] to game [%d]", client.getPlayer().getUsername(), game.getId());
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -420,7 +424,7 @@ public class GameServer {
 		try {
 			FakeGameClient fgc = new FakeGameClient(this);
 			activeThreads.put(fgc.getId(), fgc);	// add to list
-			System.out.printf("Added a fake client with id = %d\n", fgc.getId());
+			System.out.printf("Added a fake client with [%d:%s]\n", fgc.getId(), fgc.getPlayer().getUsername());
 			fgc.start();
 		} catch (NoSuchMethodException e) {
 			// TODO Auto-generated catch block
