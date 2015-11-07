@@ -63,10 +63,12 @@ public class GameClient extends Thread {
 		mySocket = clientSocket;
 		this.server = server;
 		updates = new LinkedList<GameResponse>();
-
-		inputStream = mySocket.getInputStream();
-		outputStream = mySocket.getOutputStream();
-		dataInputStream = new DataInputStream(inputStream);
+		
+		if (mySocket != null){
+			inputStream = mySocket.getInputStream();
+			outputStream = mySocket.getOutputStream();
+			dataInputStream = new DataInputStream(inputStream);
+		}
 		gamestate = Constants.GAMESTATE_NOT_LOGGED_IN;
 		player = new Player();
 	}

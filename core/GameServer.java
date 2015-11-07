@@ -9,6 +9,8 @@ import java.util.ArrayList;
 //import java.util.ArrayList;
 import java.util.HashMap;
 //import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 // Custom Imports
 import configuration.GameServerConf;
@@ -102,7 +104,16 @@ public class GameServer {
 	private void run() {
 		ServerSocket listenSocket;
 		int serverPort = configuration.getPortNumber();
-
+		
+		// testing 'addFakeGameClient'
+		Timer timer = new Timer();
+		timer.schedule(new TimerTask(){
+			@Override
+			public void run(){
+				addFakeGameClient();
+			}
+		}, 5000);
+		
 		try {
 			// Start to listen on the given port for incoming connections
 			listenSocket = new ServerSocket(serverPort);
@@ -409,6 +420,7 @@ public class GameServer {
 		try {
 			FakeGameClient fgc = new FakeGameClient(this);
 			activeThreads.put(fgc.getId(), fgc);	// add to list
+			System.out.printf("Added a fake client with id = %d\n", fgc.getId());
 		} catch (NoSuchMethodException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
