@@ -172,6 +172,7 @@ public class FakeGameClient extends GameClient{
 	 * Since we will have to remove this object from the list
 	 */
 	public void simulateLogout(){
+		System.out.printf(this.toString() + " log out\n");
 	}
 	
 	/** Simulate player join the game in the lobby
@@ -179,14 +180,20 @@ public class FakeGameClient extends GameClient{
 	 * server tell client to load the game
 	 */
 	public void simulateJoinGame(){
-		
-	};
+		// go through the list of games to see which one is open to join
+		for (GameMode game: getServer().getGameList()){
+			if (!game.isRunning() && !game.isFull()){
+				getServer().addClientToGame(this, game);
+			}
+		}
+	}
 	
 	/** Simulate player quit game(demolition derby, not the actual game)
 	 *  
 	 */
 	public void simulateQuitGame(){
-	};
+		System.out.printf(this.toString() + " quit game\n");
+	}
 	
 	/** Randomly move around
 	 * 
@@ -203,12 +210,14 @@ public class FakeGameClient extends GameClient{
 	 * it can be any pattern
 	 */
 	public void simulateScriptedMove(){
+		System.out.printf(this.toString() + " execute scipted move\n");
 	}
 	
 	/** Simulate chat
 	 * 
 	 */
 	public void simulateChat(){
+		System.out.printf(this.toString() + " sent chat\n");
 		// generate chat here
 	}
 	
@@ -231,6 +240,7 @@ public class FakeGameClient extends GameClient{
 	 * 
 	 */
 	public void simulatePowerPickup(){
+		System.out.printf(this.toString() + " pick up item\n");
 	}
 	
 	/** Randomly pick one of the simulation
@@ -262,23 +272,23 @@ public class FakeGameClient extends GameClient{
 				break;
 			case Constants.GAMESTATE_LOBBY:
 				// in lobby. can do: chat, create game, join game, log out
-				methods.get(lobbyMethodIndexes.get(random.nextInt() % lobbyMethodIndexes.size())).invoke(this);
+				methods.get(lobbyMethodIndexes.get(random.nextInt(lobbyMethodIndexes.size()))).invoke(this);
 				break;
 			case Constants.GAMESTATE_GAME_WAITING:
 				// waiting in game lobby. can do: chat, (leave game? no protocol yet), log out
-				methods.get(gameLobbyMethodIndexes.get(random.nextInt() % gameLobbyMethodIndexes.size())).invoke(this);
+				methods.get(gameLobbyMethodIndexes.get(random.nextInt(gameLobbyMethodIndexes.size()))).invoke(this);
 				break;
 			case Constants.GAMESTATE_GAME_COUNTDOWN:
 				// finished load game and ready to start. can do: chat, (leave game? no protocol yet), log out
-				methods.get(gameCountdownMethodIndexes.get(random.nextInt() % gameCountdownMethodIndexes.size())).invoke(this);
+				methods.get(gameCountdownMethodIndexes.get(random.nextInt(gameCountdownMethodIndexes.size()))).invoke(this);
 				break;
 			case Constants.GAMESTATE_GAME_PLAYING:
 				// game is on. can do: chat, move, (leave game? no protocol yet), log out, power up, pick power item, dead
-				methods.get(gamePlayingMethodIndexes.get(random.nextInt() % gamePlayingMethodIndexes.size())).invoke(this);
+				methods.get(gamePlayingMethodIndexes.get(random.nextInt(gamePlayingMethodIndexes.size()))).invoke(this);
 				break;
 			case Constants.GAMESTATE_GAME_FINISHED:
 				// game over. can do: chat, back to lobby, move, log out
-				methods.get(gameFinishedMethodIndexes.get(random.nextInt() % gameFinishedMethodIndexes.size())).invoke(this);
+				methods.get(gameFinishedMethodIndexes.get(random.nextInt(gameFinishedMethodIndexes.size()))).invoke(this);
 				break;
 			default:
 				break;
@@ -301,6 +311,7 @@ public class FakeGameClient extends GameClient{
 	 * @return
 	 */
 	public void simulateReady(){
+		// set client to ready to count down
 	}
 	
 	/** simulate create game lobby
@@ -333,6 +344,6 @@ public class FakeGameClient extends GameClient{
 	
 	@Override
 	public String toString(){
-		return "FakeGameClient [" + getId() + "]";
+		return "FakeGameClient [" + getId() + ":" + getPlayer().getUsername() + "]";
 	}
 }

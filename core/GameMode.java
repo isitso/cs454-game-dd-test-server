@@ -86,4 +86,9 @@ public abstract class GameMode extends Thread {
 	public GameClient getClient(long id){
 		return clients.get(id);
 	}
+	
+	public boolean isFull(){
+		return clients.size() >= MAX_PLAYER_COUNT;
+	}
+	
 }

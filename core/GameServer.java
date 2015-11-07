@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import cmd.CommandServer;
 // Custom Imports
 import configuration.GameServerConf;
 import metadata.Constants;
@@ -107,13 +108,14 @@ public class GameServer {
 		
 		// testing 'addFakeGameClient'
 		Timer timer = new Timer();
-		timer.schedule(new TimerTask(){
-			@Override
-			public void run(){
-				addFakeGameClient();				
-			}
-		}, 5000);
-		
+		for (int i = 0; i < 2; i++){
+			timer.schedule(new TimerTask(){
+				@Override
+				public void run(){
+					addFakeGameClient();				
+				}
+			}, i * 5000 );
+		}
 		try {
 			// Start to listen on the given port for incoming connections
 			listenSocket = new ServerSocket(serverPort);
@@ -434,6 +436,10 @@ public class GameServer {
 		} catch (Exception e){
 			e.printStackTrace();
 		}
+	}
+	
+	public ArrayList<GameMode> getGameList(){
+		return new ArrayList<GameMode>(games.values());
 	}
 	
 	public static void main(String args[]) throws SQLException {
