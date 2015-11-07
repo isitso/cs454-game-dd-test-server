@@ -401,7 +401,28 @@ public class GameServer {
 		accounts.put(username, password);
 		return Constants.LOGIN_SUCCESS;
 	}
-
+	
+	/** add an instance of FakeGameClient
+	 * 
+	 */
+	public void addFakeGameClient(){
+		try {
+			FakeGameClient fgc = new FakeGameClient(this);
+			activeThreads.put(fgc.getId(), fgc);	// add to list
+		} catch (NoSuchMethodException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e){
+			e.printStackTrace();
+		}
+	}
+	
 	public static void main(String args[]) throws SQLException {
 		gameServer = new GameServer();
 

@@ -37,7 +37,7 @@ public class Constants {
     // Other
     public static final int SAVE_INTERVAL = 60000;
     public static final String CLIENT_VERSION = "1.00";
-    public static final int TIMEOUT_SECONDS = 7;
+    public static final int TIMEOUT_SECONDS = 30;
     
     
     // Login flags
@@ -90,4 +90,7 @@ public class Constants {
     public static final int SIMULATION_DELAY = 5000; // miliseconds
     public static final boolean SIMULATION_AUTO_LOGOUT = false;
     public static final boolean SIMULATION_AUTO_QUIT_GAME = false;
+    public static final int SIMULATION_LOBBY_DELAY = 5; //seconds
+    public static final int SIMULATION_GAME_LOBBY_DELAY = 5;
+    public static final int SIMULATION_GAME_DELAY = 3;
 }
