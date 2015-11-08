@@ -74,7 +74,7 @@ public class GameServer {
 	 */
 	private void configure() {
 		ConfFileParser confFileParser = new ConfFileParser(
-				"../conf/gameServer.conf");
+				"gameServer.conf");
 		configuration.setConfRecords(confFileParser.parse());
 	}
 

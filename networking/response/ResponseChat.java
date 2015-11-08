@@ -12,7 +12,7 @@ public class ResponseChat extends GameResponse {
 	 */
 	public ResponseChat() {
 		// TODO Auto-generated constructor stub
-		responseCode = Constants.S_CHAT;
+		responseCode = Constants.SMSG_CHAT;
 	}
 	
 	/**

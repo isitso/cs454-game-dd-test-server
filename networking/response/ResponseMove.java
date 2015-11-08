@@ -11,7 +11,7 @@ public class ResponseMove extends GameResponse {
 	 */
 	public ResponseMove() {
 		// TODO Auto-generated constructor stub
-		responseCode = Constants.S_MOVE;
+		responseCode = Constants.SMSG_MOVE;
 	}
 	
 	/**

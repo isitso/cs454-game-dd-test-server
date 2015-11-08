@@ -16,7 +16,7 @@ public class ResponseLogin extends GameResponse {
 	public ResponseLogin() {
 		// TODO Auto-generated constructor stub
 		// Set the response id 
-		responseCode = Constants.S_AUTH;
+		responseCode = Constants.SMSG_AUTH;
 	}
 
 	/**

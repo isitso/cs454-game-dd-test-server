@@ -21,16 +21,23 @@ public class GameRequestTable {
         requestNames = new HashMap<Short, Class>();
 
         // Populate the hash map using request codes and class names
-        add(Constants.C_AUTH, "RequestLogin");
-        add(Constants.C_REGISTER, "RequestCreateAccount");
-        add(Constants.C_CREATE_CHARACTER, "RequestCreateAccount");
-        add(Constants.C_DISCONNECT, "RequestLogout");
-        add(Constants.C_GO_TO_CHARACTER_SELECTION, "RequestGoToCharacterSelection");
-        add(Constants.C_SELECT_CHARACTER, "RequestSelectCharacter");
-        add(Constants.C_CREATE_CHARACTER, "RequestCreateCharacter");
-        add(Constants.C_MOVE, "RequestMove");
-        add(Constants.C_CHAT, "RequestChat");
-        add(Constants.C_HEARTBEAT, "RequestHeartbeat");
+        add(Constants.CMSG_AUTH, "RequestLogin");
+        add(Constants.CMSG_REGISTER, "RequestRegister");
+        add(Constants.CMSG_CREATE_CHARACTER, "RequestCreateCharacter");
+        add(Constants.CMSG_CHAT, "RequestChat");
+        add(Constants.CMSG_MOVE, "RequestMove");
+        add(Constants.CMSG_POWER_UP, "RequestPowerUp");
+        add(Constants.CMSG_POWER_PICKUP, "RequestPowerPickup");
+        add(Constants.CMSG_HEALTH, "RequestHealth");
+        add(Constants.CMSG_RESULTS, "RequestResults");
+        add(Constants.CMSG_RANKINGS, "RequestRankings");
+        add(Constants.CMSG_PRIZES, "RequestPrizes");
+        add(Constants.CMSG_COLLISION, "RequestCollision");
+        add(Constants.CMSG_DEAD, "RequestDead");
+        add(Constants.CMSG_READY, "RequestReady");
+        add(Constants.CMSG_DISCONNECT, "RequestDisconnect");
+        
+        add(Constants.REQ_HEARTBEAT, "RequestHeartbeat");
     }
 
     /**

@@ -4,13 +4,13 @@ import java.io.IOException;
 import java.sql.*;
 
 import metadata.Constants;
-import networking.response.ResponseCreateAccount;
+import networking.response.ResponseRegister;
 import utility.DataReader;
 
-public class RequestCreateAccount extends GameRequest {
+public class RequestRegister extends GameRequest {
 	String username, pwd;
 
-	public RequestCreateAccount() {
+	public RequestRegister() {
 		// TODO Auto-generated constructor stub
 		super();
 	}
@@ -35,7 +35,7 @@ public class RequestCreateAccount extends GameRequest {
 	 */
 	@Override
 	public void doBusiness() throws Exception {
-		ResponseCreateAccount response = new ResponseCreateAccount();
+		ResponseRegister response = new ResponseRegister();
 		try {
 //			// open connection to DB
 //			makeConnectionToDB();

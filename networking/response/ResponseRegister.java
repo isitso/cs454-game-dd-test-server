@@ -4,16 +4,16 @@ package networking.response;
 import metadata.Constants;
 import utility.GamePacket;
 
-public class ResponseCreateAccount extends GameResponse {
+public class ResponseRegister extends GameResponse {
 	private int flag;
 	private int errorType;
 	
 	/**
 	 * Must have for each response class because responseCode must be set
 	 */
-	public ResponseCreateAccount() {
+	public ResponseRegister() {
 		// TODO Auto-generated constructor stub
-		responseCode = Constants.S_REGISTER;
+		responseCode = Constants.SMSG_REGISTER;
 	}
 	
 	/**

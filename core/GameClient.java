@@ -21,7 +21,6 @@ import metadata.GameRequestTable;
 //import model.Player;
 import networking.request.GameRequest;
 import networking.response.GameResponse;
-import networking.response.ResponsePlayerLogout;
 import utility.DataReader;
 
 import java.sql.*;
@@ -114,14 +113,14 @@ public class GameClient extends Thread {
 						request.parse();
 						// Interpret the data
 						request.doBusiness();
-						if (Constants.DEBUG && requestCode != Constants.C_HEARTBEAT)
+						if (Constants.DEBUG && requestCode != Constants.REQ_HEARTBEAT)
 							System.out.println(request);
 						// Retrieve any responses created by the request object
 						for (GameResponse response : request.getResponses()) {
 							// The client is already logged in. Save responses till next Heartbeat
 							updates.add(response);
 						}
-						if ((gamestate == Constants.GAMESTATE_NOT_LOGGED_IN) || (requestCode == Constants.C_HEARTBEAT))
+						if ((gamestate == Constants.GAMESTATE_NOT_LOGGED_IN) || (requestCode == Constants.REQ_HEARTBEAT))
 							flushResponses();
 					}
 				} else {

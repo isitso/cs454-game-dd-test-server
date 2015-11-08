@@ -3,7 +3,6 @@ package core;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Random;
@@ -11,12 +10,9 @@ import java.util.Random;
 import metadata.Constants;
 
 import java.lang.reflect.*;
-import java.time.temporal.IsoFields;
 
 import networking.response.GameResponse;
 import networking.response.ResponseLogin;
-import networking.response.ResponseLogout;
-import networking.response.ResponsePlayerLogout;
 
 public class FakeGameClient extends GameClient{
 	/** This class will be used to simulate GameClient
