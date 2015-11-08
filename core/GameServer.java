@@ -338,6 +338,7 @@ public class GameServer {
 			game.removeClient(id);
 			addClientToLobby(client);
 			client.setGamestate(Constants.GAMESTATE_LOBBY);
+			client.setGame(null); 	// remove game reference
 			System.out.println("Move " + client + " from " + game + "to lobby");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -438,6 +439,18 @@ public class GameServer {
 		} catch (Exception e){
 			e.printStackTrace();
 		}
+	}
+	
+	/** remove a finished game
+	 * 
+	 * @param id
+	 * @throws Exception
+	 */
+	public void removeGame(long id) throws Exception{
+		if (!games.containsKey(id))
+			throw new Exception("Destroying non existing game");
+		if (games.get(id).isRunning())
+		games.remove(id);
 	}
 	
 	public ArrayList<GameMode> getGameList(){

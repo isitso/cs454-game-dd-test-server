@@ -11,6 +11,8 @@ import java.util.Random;
 import metadata.Constants;
 
 import java.lang.reflect.*;
+import java.time.temporal.IsoFields;
+
 import networking.response.GameResponse;
 import networking.response.ResponseLogin;
 import networking.response.ResponseLogout;
@@ -185,8 +187,9 @@ public class FakeGameClient extends GameClient{
 	public void simulateJoinGame(){
 		// go through the list of games to see which one is open to join
 		for (GameMode game: getServer().getGameList()){
-			if (!game.isRunning() && !game.isFull()){
+			if (!game.isFinished() && !game.isRunning() && !game.isFull()){
 				getServer().addClientToGame(this, game);
+				return;
 			}
 		}
 	}

@@ -33,6 +33,8 @@ public abstract class GameMode extends Thread {
 	 * @throws Exception
 	 */
 	public void addClient(long id, GameClient client) throws Exception {
+		if (finished)
+			throw new Exception("Game is over");
 		synchronized (clients){
 			if (clients.size() >= MAX_PLAYER_COUNT)
 				throw new Exception("Game is full.");
@@ -119,6 +121,10 @@ public abstract class GameMode extends Thread {
 	@Override
 	public String toString(){
 		return "Game [" + getId() + "]";
+	}
+
+	public boolean isFinished() {
+		return finished;
 	}
 	
 }

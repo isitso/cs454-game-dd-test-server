@@ -26,7 +26,13 @@ public class DemolitionDerbyGame extends GameMode {
 			}
 		}, 5000);
 	}
-	public void endGame(){}
+	public void endGame(){
+		try {
+			server.removeGame(getId());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 	
 	@Override
 	public void run(){
@@ -50,8 +56,10 @@ public class DemolitionDerbyGame extends GameMode {
 					}
 				}else{
 					// game finish. wait till all client get back to lobby then destroy game
-					if (isEmpty())
+					if (isEmpty()){
 						isRunning = false;
+						endGame();
+					}
 				}
 				Thread.sleep(1);
 			}
