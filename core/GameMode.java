@@ -3,6 +3,7 @@ package core;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import metadata.Constants;
 import networking.response.GameResponse;
 
 public abstract class GameMode extends Thread {
@@ -11,10 +12,11 @@ public abstract class GameMode extends Thread {
 	 */
 	
 	protected HashMap<Long, GameClient> clients = new HashMap<Long, GameClient>();
-	protected HashMap<Long, Player> players = new HashMap<Long, Player>();
+	//protected HashMap<Long, Player> players = new HashMap<Long, Player>();
 	public final static int MAX_PLAYER_COUNT = 2;
-	protected boolean isRunning, finished;
+	protected boolean isRunning;
 	protected GameServer server;
+	protected int gamestate;
 	
 	/** Start the game (dd or rr)
 	 * 
@@ -33,8 +35,8 @@ public abstract class GameMode extends Thread {
 	 * @throws Exception
 	 */
 	public void addClient(long id, GameClient client) throws Exception {
-		if (finished)
-			throw new Exception("Game is over");
+		if (gamestate != Constants.GAMEMODE_STATE_LOBBY)
+			throw new Exception("Game is already in process.");
 		synchronized (clients){
 			if (clients.size() >= MAX_PLAYER_COUNT)
 				throw new Exception("Game is full.");
@@ -85,7 +87,10 @@ public abstract class GameMode extends Thread {
 	}
 
 	public ArrayList<Player> getPlayers(){
-		return new ArrayList<Player>(players.values());
+		ArrayList<Player> list = new ArrayList<Player>();
+		for (GameClient client: clients.values())
+			list.add(client.getPlayer());
+		return list;
 	}
 	
 	public GameClient getClient(long id){
@@ -124,7 +129,16 @@ public abstract class GameMode extends Thread {
 	}
 
 	public boolean isFinished() {
-		return finished;
+		return gamestate == Constants.GAMEMODE_STATE_ENDED;
 	}
+
+	public int getGamestate() {
+		return gamestate;
+	}
+
+	public void setGameState(int state) {
+		this.gamestate = state;
+	}
+	
 	
 }

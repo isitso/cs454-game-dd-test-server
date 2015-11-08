@@ -106,14 +106,17 @@ public class GameServer {
 		int serverPort = configuration.getPortNumber();
 		
 		// testing 'addFakeGameClient'
-		Timer timer = new Timer();
-		for (int i = 0; i < Constants.SIMULATION_FAKE_CLIENT_COUNT; i++){
-			timer.schedule(new TimerTask(){
-				@Override
-				public void run(){
-					addFakeGameClient();				
-				}
-			}, (i + 1) * 5000 );
+
+		if (Constants.SIMULATION_ON){
+			Timer timer = new Timer();
+			for (int i = 0; i < Constants.SIMULATION_FAKE_CLIENT_COUNT; i++){
+				timer.schedule(new TimerTask(){
+					@Override
+					public void run(){
+						addFakeGameClient();				
+					}
+				}, (i + 1) * 5000 );
+			}
 		}
 		try {
 			// Start to listen on the given port for incoming connections

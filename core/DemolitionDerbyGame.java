@@ -12,11 +12,13 @@ public class DemolitionDerbyGame extends GameMode {
 	 */
 	public DemolitionDerbyGame(GameServer server){
 		this.server = server;
+		gamestate = Constants.GAMEMODE_STATE_LOBBY;
 	}
 	
 	public void startGame(){
 		// get all client to load game
 		setAllClientGamestate(Constants.GAMESTATE_GAME_COUNTDOWN);
+		gamestate = Constants.GAMEMODE_STATE_COUNTDOWN;
 		Timer timer = new Timer();
 		// schedule to start
 		timer.schedule(new TimerTask() {			
@@ -39,17 +41,17 @@ public class DemolitionDerbyGame extends GameMode {
 		// check if all game ready before countdown
 		long startTime = System.currentTimeMillis();
 		long currentTime = 0;
-		finished = false;
 		isRunning = true;
+		gamestate = Constants.GAMEMODE_STATE_PLAY;
 		try{
 			setAllClientGamestate(Constants.GAMESTATE_GAME_PLAYING);
 			System.out.println(this + " is in process");
 			while (isRunning){
 				// testing purpose. use time out. should be 1 man alive or time out
 				currentTime = System.currentTimeMillis();
-				if (!finished){
+				if (gamestate != Constants.GAMEMODE_STATE_ENDED){
 					if (((currentTime - startTime) / 1000) > Constants.SIMULATION_GAME_TIME_OUT){
-						finished = true;
+						gamestate = Constants.GAMEMODE_STATE_ENDED;
 						// set all client gamestate to finished
 						setAllClientGamestate(Constants.GAMESTATE_GAME_FINISHED);	
 						System.out.println(this + " is finished");
