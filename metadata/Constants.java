@@ -80,12 +80,14 @@ public class Constants {
     public static final int GAMESTATE_GAME_COUNTDOWN = 3;
     public static final int GAMESTATE_GAME_PLAYING = 4;
     public static final int GAMESTATE_GAME_FINISHED = 5;
+    public static final int GAMESTATE_GAME_READY = 6;
     public static final int GAMESTATE_LOADING = 9;
     
     // DEBUG
     public static final boolean DEBUG = true;
     
     // SIMULATION
+    public static final int SIMULATION_FAKE_CLIENT_COUNT = 3;
     public static final float SIMULATION_PLAYER_MAX_SPEED = 0.001f;
     public static final int SIMULATION_DELAY = 5000; // miliseconds
     public static final boolean SIMULATION_AUTO_LOGOUT = false;
@@ -93,6 +95,7 @@ public class Constants {
     public static final int SIMULATION_LOBBY_DELAY = 5; //seconds
     public static final int SIMULATION_GAME_LOBBY_DELAY = 5;
     public static final int SIMULATION_GAME_DELAY = 3;
+    public static final int SIMULATION_GAME_TIME_OUT = 15;	//seconds
     
     // GAME MODE
     public static final int GAMEMODE_DD = 0;

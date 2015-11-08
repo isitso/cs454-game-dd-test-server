@@ -54,7 +54,9 @@ public class FakeGameClient extends GameClient{
 		methods.add(FakeGameClient.class.getMethod("simulateReady", null));	//8
 		methods.add(FakeGameClient.class.getMethod("simulateDead", null));	//9
 		methods.add(FakeGameClient.class.getMethod("simulateCreateGame", null));	//10
-		//methods.add(FakeGameClient.class.getMethod("simulateScriptedMove", null));	//11
+		methods.add(FakeGameClient.class.getMethod("simulateQuitGame", null));	//11
+		
+		//methods.add(FakeGameClient.class.getMethod("simulateScriptedMove", null));	//12
 		
 		// just logged in. strolling in lobby
 		lobbyMethodIndexes.add(1);	//chat
@@ -79,15 +81,16 @@ public class FakeGameClient extends GameClient{
 		gamePlayingMethodIndexes.add(7);	// random move
 		gamePlayingMethodIndexes.add(4);	// power pick up
 		gamePlayingMethodIndexes.add(5);	// power up
-		gamePlayingMethodIndexes.add(9);
+		gamePlayingMethodIndexes.add(9);	// dead
 		if (Constants.SIMULATION_AUTO_LOGOUT)
 			gamePlayingMethodIndexes.add(3);
 		
 		// game over. can do: chat, back to lobby, move, log out
 		gameFinishedMethodIndexes.add(1);	// chat
 		gameFinishedMethodIndexes.add(7);	// random move
+		gameFinishedMethodIndexes.add(11);	// leave/quit game
 		if (Constants.SIMULATION_AUTO_LOGOUT)
-		gameFinishedMethodIndexes.add(3);
+			gameFinishedMethodIndexes.add(3);
 
 		getPlayer().setId(100 + (int)getId());
 		getPlayer().setUsername("FakeUser" + getPlayer().getId());
@@ -192,7 +195,8 @@ public class FakeGameClient extends GameClient{
 	 *  
 	 */
 	public void simulateQuitGame(){
-		System.out.printf(this.toString() + " quit game\n");
+		System.out.println(this + " left " + getGame());
+		getServer().moveClientFromGameToLobby(getId(), getGame());
 	}
 	
 	/** Randomly move around
@@ -203,6 +207,7 @@ public class FakeGameClient extends GameClient{
 		float x = random.nextFloat() * Constants.SIMULATION_PLAYER_MAX_SPEED;
 		float y = random.nextFloat() * Constants.SIMULATION_PLAYER_MAX_SPEED;
 		getPlayer().getCharacter().setPos(x, y, getPlayer().getCharacter().getZ());
+		System.out.println(this + " move to <" + x + ", " + y + ", " + getPlayer().getCharacter().getZ());
 		// generate response here
 	}
 
@@ -264,6 +269,8 @@ public class FakeGameClient extends GameClient{
 	 */
 	public void simulateRandomWithoutError(){
 		Random random = new Random();
+		if (random.nextInt(2) == 0)		// more randomness. can skip a turn
+			return;
 		try {
 			switch (getGamestate()){
 			case Constants.GAMESTATE_NOT_LOGGED_IN:

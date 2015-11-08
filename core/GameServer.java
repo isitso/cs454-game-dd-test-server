@@ -108,13 +108,13 @@ public class GameServer {
 		
 		// testing 'addFakeGameClient'
 		Timer timer = new Timer();
-		for (int i = 0; i < 2; i++){
+		for (int i = 0; i < Constants.SIMULATION_FAKE_CLIENT_COUNT; i++){
 			timer.schedule(new TimerTask(){
 				@Override
 				public void run(){
 					addFakeGameClient();				
 				}
-			}, i * 5000 );
+			}, (i + 1) * 5000 );
 		}
 		try {
 			// Start to listen on the given port for incoming connections
@@ -306,7 +306,8 @@ public class GameServer {
 			synchronized (lobbyClients) {
 				lobbyClients.remove(client.getId());
 			}
-			System.out.printf("Added client [%s] to game [%d]", client.getPlayer().getUsername(), game.getId());
+			System.out.printf("Added client [%s] to game [%d]\n", client.getPlayer().getUsername(), game.getId());
+			System.out.println(game.toString() + ": " + game.getClientNames());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -337,6 +338,8 @@ public class GameServer {
 			GameClient client = game.getClient(id);
 			game.removeClient(id);
 			addClientToLobby(client);
+			client.setGamestate(Constants.GAMESTATE_LOBBY);
+			System.out.println("Move " + client + " from " + game + "to lobby");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

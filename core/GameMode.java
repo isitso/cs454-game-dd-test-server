@@ -12,8 +12,8 @@ public abstract class GameMode extends Thread {
 	
 	protected HashMap<Long, GameClient> clients = new HashMap<Long, GameClient>();
 	protected HashMap<Long, Player> players = new HashMap<Long, Player>();
-	public final static int MAX_PLAYER_COUNT = 10;
-	protected boolean isRunning;
+	public final static int MAX_PLAYER_COUNT = 2;
+	protected boolean isRunning, finished;
 	protected GameServer server;
 	
 	/** Start the game (dd or rr)
@@ -37,6 +37,9 @@ public abstract class GameMode extends Thread {
 			if (clients.size() >= MAX_PLAYER_COUNT)
 				throw new Exception("Game is full.");
 			clients.put(id, client);
+			// testing purpose. start game right after full
+			if (clients.size() == MAX_PLAYER_COUNT)
+				startGame();
 		}
 	}
 	
@@ -89,6 +92,33 @@ public abstract class GameMode extends Thread {
 	
 	public boolean isFull(){
 		return clients.size() >= MAX_PLAYER_COUNT;
+	}
+	
+	public boolean isEmpty(){
+		return clients.isEmpty();
+	}
+	
+	public String getClientNames(){
+		String str = "";
+		for (GameClient client: clients.values()){
+			str += "[" + client.getId() + ":" +client.getPlayer().getUsername() + "]" + " ";
+		}
+		return str.trim();
+	}
+	
+	/** set all clients' gamestate to one state
+	 * 
+	 * @param gamestate
+	 */
+	public void setAllClientGamestate(int gamestate){
+		for (GameClient client: clients.values()){
+			client.setGamestate(gamestate);
+		}
+	}
+	
+	@Override
+	public String toString(){
+		return "Game [" + getId() + "]";
 	}
 	
 }
