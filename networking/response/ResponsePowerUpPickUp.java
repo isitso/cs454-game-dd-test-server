@@ -5,7 +5,7 @@ import metadata.Constants;
 import utility.GamePacket;
 
 public class ResponsePowerUpPickUp extends GameResponse {
-
+	int validate;
     public ResponsePowerUpPickUp() {
         responseCode = Constants.SMSG_POWER_PICKUP;
     }
@@ -14,7 +14,14 @@ public class ResponsePowerUpPickUp extends GameResponse {
     public byte[] constructResponseInBytes() {
         GamePacket packet = new GamePacket(responseCode);
       /*Construct packet*/
+        packet.addInt32(validate);
         return packet.getBytes();
     }
     
+    /** Set data
+     * 
+     */
+    public void setData(int validate){
+    	this.validate = validate;
+    }
 }

@@ -7,7 +7,7 @@ import utility.DataReader;
 
 public class RequestMove extends GameRequest {
 	float x, y, z, h, p, r;
-	
+	String keys;
 	/** constructor
 	 * 
 	 */
@@ -27,8 +27,7 @@ public class RequestMove extends GameRequest {
     		y = DataReader.readFloat(dataInput);
     		z = DataReader.readFloat(dataInput);
     		h = DataReader.readFloat(dataInput);
-    		p = DataReader.readFloat(dataInput);
-    		r = DataReader.readFloat(dataInput);
+    		keys = DataReader.readString(dataInput);
     	} catch (Exception e) {
     		e.printStackTrace();
     	}
@@ -43,10 +42,11 @@ public class RequestMove extends GameRequest {
     	ResponseMove response = new ResponseMove();
     	// set character new position
     	client.getPlayer().getCharacter().setPos(x, y, z);
-    	client.getPlayer().getCharacter().setHpr(h, p, r);
+    	client.getPlayer().getCharacter().setH(h);
     	// generate response
-    	response.setMove(client.getPlayer().getCharacter().getId(), x, y, z, h, p, r);
+    	response.setMove(client.getPlayer().getCharacter().getName(), x, y, z, h);
     	// send to other players
-    	client.getServer().addResponseForAllOnlinePlayers(client.getId(), response);
+    	if (client.getGame() != null)
+    	client.getGame().addResponseForAllClients(response);
     }
 }

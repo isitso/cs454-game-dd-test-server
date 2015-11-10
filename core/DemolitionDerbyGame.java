@@ -58,6 +58,7 @@ public class DemolitionDerbyGame extends GameMode {
 					}
 				}else{
 					// game finish. wait till all client get back to lobby then destroy game
+					// send results here
 					if (isEmpty()){
 						isRunning = false;
 						endGame();

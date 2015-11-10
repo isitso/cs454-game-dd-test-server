@@ -5,7 +5,7 @@ import metadata.Constants;
 import utility.GamePacket;
 
 public class ResponseResults extends GameResponse {
-
+	int place;
     public ResponseResults() {
         responseCode = Constants.SMSG_RESULTS;
     }
@@ -17,4 +17,7 @@ public class ResponseResults extends GameResponse {
         return packet.getBytes();
     }
     
+    public void setData(int place){
+    	this.place = place;
+    }
 }

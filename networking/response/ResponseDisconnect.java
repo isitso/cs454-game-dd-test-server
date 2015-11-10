@@ -4,7 +4,6 @@ import metadata.Constants;
 import utility.GamePacket;
 
 public class ResponseDisconnect extends GameResponse {
-
     public ResponseDisconnect() {
         responseCode = Constants.SMSG_DISCONNECT;
     }
@@ -15,5 +14,5 @@ public class ResponseDisconnect extends GameResponse {
         /*Packet construction*/
         return packet.getBytes();
     }
-   
+
 }

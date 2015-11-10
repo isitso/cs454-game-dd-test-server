@@ -50,7 +50,13 @@ public class RequestLogin extends GameRequest {
 	public void doBusiness() throws Exception {
 		ResponseLogin responseLogin = new ResponseLogin();
 		// Testing purpose: just let client log in
-		responseLogin.setLoginSuccess();
+		int clientId = (int)client.getId();
+		client.getPlayer().getCharacter().setId(clientId);
+		client.getPlayer().getCharacter().setName("name" + clientId);
+		client.getPlayer().getCharacter().setTypeId(1);
+		ArrayList<Character> list = new ArrayList<Character>();
+		list.add(client.getPlayer().getCharacter());
+		responseLogin.setData(1, list);
 		responses.add(responseLogin);
 	}
 }

@@ -11,7 +11,7 @@ import core.Character;
 
 public class ResponseLogin extends GameResponse {
 	private int flag;
-	private int errorType;
+	ArrayList<Character> list;
 	
 	public ResponseLogin() {
 		// TODO Auto-generated constructor stub
@@ -27,52 +27,19 @@ public class ResponseLogin extends GameResponse {
     public byte[] constructResponseInBytes() {
         GamePacket packet = new GamePacket(responseCode);
         packet.addInt32(flag);
-        if (flag == Constants.LOGIN_FAIL){
-        	// Login fail: what kind of error?
-        	packet.addInt32(errorType);
+        if (flag == 1){
+        	packet.addInt32(list.size());
+        	for (Character c: list){
+        		packet.addString(c.getName());
+        		packet.addInt32(c.getId());
+        		packet.addInt32(c.getTypeId());
+        	}
         }
         return packet.getBytes();
     }
     
-    /**
-     * Set login fail. Flag is auto set to fail.
-     * @param errorType which error to be send to the client
-     * @return void
-     */
-    public void setLoginFail(int error){
-    	// set the flag to fail
-    	flag = Constants.LOGIN_FAIL;
-    	
-    	// set the error type
-    	errorType = error;
-    	if (Constants.DEBUG)
-			System.out.printf("Login fail. error =%d\n", errorType);
+    public void setData(int flag, ArrayList<Character> list){
+	    this.flag = flag;
+	    this.list = list;
     }
-    
-    /**
-     * Set log in success. Flag is auto set to success.
-     * 
-     */
-    public void setLoginSuccess(){
-    	// set the flag to success
-    	flag = Constants.LOGIN_SUCCESS;
-    	if (Constants.DEBUG)
-			System.out.println("Login success");
-    }
-    
-	public int getFlag() {
-		return flag;
-	}
-	public void setFlag(int flag) {
-		this.flag = flag;
-	}
-
-	public int getErrorType() {
-		return errorType;
-	}
-	public void setErrorType(int errorType) {
-		this.errorType = errorType;
-	}
-
-    
 }

@@ -5,7 +5,7 @@ import metadata.Constants;
 import utility.GamePacket;
 
 public class ResponsePrizes extends GameResponse {
-
+	int itemId;
     public ResponsePrizes() {
         responseCode = Constants.SMSG_PRIZES;
     }
@@ -14,7 +14,11 @@ public class ResponsePrizes extends GameResponse {
     public byte[] constructResponseInBytes() {
         GamePacket packet = new GamePacket(responseCode);
       /*Construct packet*/
+        packet.addInt32(itemId);
         return packet.getBytes();
     }
     
+    void setData(int itemId){
+    	this.itemId = itemId;
+    }
 }

@@ -4,8 +4,8 @@ import metadata.Constants;
 import utility.GamePacket;
 
 public class ResponseMove extends GameResponse {
-	int characterID;
-	float xPos, yPos, zPos, hVal, pVal, rVal;
+	String username;
+	float x, y, z, h;
 	/**
 	 * constructor. set response code
 	 */
@@ -21,13 +21,11 @@ public class ResponseMove extends GameResponse {
     @Override
     public byte[] constructResponseInBytes() {
         GamePacket packet = new GamePacket(responseCode);
-        packet.addInt32(characterID);
-        packet.addFloat(xPos);
-        packet.addFloat(yPos);
-        packet.addFloat(zPos);
-        packet.addFloat(hVal);
-        packet.addFloat(pVal);
-        packet.addFloat(rVal);
+        packet.addString(username);
+        packet.addFloat(x);
+        packet.addFloat(y);
+        packet.addFloat(z);
+        packet.addFloat(h);
         return packet.getBytes();
     }
     
@@ -41,15 +39,13 @@ public class ResponseMove extends GameResponse {
      * @param p
      * @param r
      */
-    public void setMove(int id, float x, float y, float z,
-    		float h, float p, float r){
+    public void setMove(String name, float x, float y, float z,
+    		float h){
     	// sets the info
-    	characterID = id;
-    	xPos = x;
-    	yPos = y;
-    	zPos = z;
-    	hVal = h;
-    	pVal = p;
-    	rVal = r;
+    	username = name;
+    	this.x = x;
+    	this.y = y;
+    	this.z = z;
+    	this.h = h;
     }
 }
