@@ -113,6 +113,13 @@ public abstract class GameMode extends Thread {
 		return str.trim();
 	}
 	
+	public GameClient getClientByUsername(String username){
+		for (GameClient client : clients.values()){
+			if (client.getPlayer().getUsername().equalsIgnoreCase(username))
+				return client;
+		}
+		return null;
+	}
 	/** set all clients' gamestate to one state
 	 * 
 	 * @param gamestate

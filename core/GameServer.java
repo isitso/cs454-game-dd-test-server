@@ -267,16 +267,25 @@ public class GameServer {
 	 * @param response
 	 *            is the instance containing the response information
 	 */
-	public void addResponseForAllOnlinePlayers(long player_id,
+	public void addResponseForAllOnlinePlayers(long playerId,
 			GameResponse response) {
-		for (GameClient client : activeThreads.values()) {
-			if (client.getId() != player_id
-					&& client.getGamestate() == Constants.GAMESTATE_GAME_PLAYING) {
-				client.addResponseForUpdate(response);
-			}
+		addResponseForLobby(playerId, response);
+		for (GameMode game: games.values()){
+			game.addResponseForAllClients(response);
 		}
 	}
 
+	/** add response for the lobby players
+	 * 
+	 * @param playerId
+	 * @param response
+	 */
+	public void addResponseForLobby(long playerId, GameResponse response){
+		for (GameClient client: lobbyClients.values()){
+			if (client.getId() != playerId)
+				client.addResponseForUpdate(response);
+		}		
+	}
 	/**
 	 * create a game. can be dd or rr
 	 * 

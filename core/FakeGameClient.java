@@ -12,7 +12,13 @@ import metadata.Constants;
 import java.lang.reflect.*;
 
 import networking.response.GameResponse;
+import networking.response.ResponseChat;
+import networking.response.ResponseCollision;
+import networking.response.ResponseDead;
 import networking.response.ResponseLogin;
+import networking.response.ResponseMove;
+import networking.response.ResponsePowerUpPickUp;
+import networking.response.ResponsePowerUpUse;
 
 public class FakeGameClient extends GameClient{
 	/** This class will be used to simulate GameClient
@@ -171,9 +177,12 @@ public class FakeGameClient extends GameClient{
 	/** Simulate player logout
 	 * Should this be in the FakeGameClient or FakePlayer?
 	 * Since we will have to remove this object from the list
+	 * @throws Exception 
 	 */
-	public void simulateLogout(){
+	public void simulateLogout() throws Exception{
+		getGame().removeClient(getId());
 		System.out.printf(this.toString() + " log out\n");
+		isPlaying = false;	// stop run()
 	}
 	
 	/** Simulate player join the game in the lobby
@@ -203,11 +212,18 @@ public class FakeGameClient extends GameClient{
 	 */
 	public void simulateRandomMove(){
 		Random random = new Random();
-		float x = random.nextFloat() * Constants.SIMULATION_PLAYER_MAX_SPEED;
-		float y = random.nextFloat() * Constants.SIMULATION_PLAYER_MAX_SPEED;
-		getPlayer().getCharacter().setPos(x, y, getPlayer().getCharacter().getZ());
-		System.out.println(this + " move to <" + x + ", " + y + ", " + getPlayer().getCharacter().getZ());
-		// generate response here
+		int moveRequestCount = 10;
+		for (int i = 0; i < moveRequestCount; i++){
+			float x = random.nextFloat() * Constants.SIMULATION_PLAYER_MAX_SPEED;
+			float y = random.nextFloat() * Constants.SIMULATION_PLAYER_MAX_SPEED;
+			getPlayer().getCharacter().setPos(x, y, getPlayer().getCharacter().getZ());
+			System.out.println(this + " move to <" + x + ", " + y + ", " + getPlayer().getCharacter().getZ());
+			// generate response here
+			ResponseMove response = new ResponseMove();
+			response.setMove(getPlayer().getUsername(), x, y, getPlayer().getCharacter().getZ(),
+					getPlayer().getCharacter().getH());
+			responses.add(response);	// add to queue. later use queue to add to all clients
+		}
 	}
 
 	/** Move around, but not randomly
@@ -221,6 +237,9 @@ public class FakeGameClient extends GameClient{
 	 * 
 	 */
 	public void simulateChat(){
+		ResponseChat response = new ResponseChat();
+		response.setData(getPlayer().getUsername(), "This is a chat msg");
+		getGame().addResponseForAllClients(response);
 		System.out.printf(this.toString() + " sent chat\n");
 		// generate chat here
 	}
@@ -234,6 +253,9 @@ public class FakeGameClient extends GameClient{
 			try {
 				getPlayer().getCharacter().usePowerUp(1);
 				// generate response here
+				ResponsePowerUpUse response = new ResponsePowerUpUse();
+				response.setData(getPlayer().getUsername(), 1);
+				getGame().addResponseForAllClients(response);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}			
@@ -258,7 +280,7 @@ public class FakeGameClient extends GameClient{
 	 */
 	public void simulateRandomWithError() throws IllegalAccessException, IllegalArgumentException, InvocationTargetException{
 		Random random = new Random();
-		methods.get(random.nextInt() % methods.size()).invoke(this);
+		methods.get(random.nextInt(methods.size())).invoke(this);
 	}
 	
 	/** Randomly pick one of the simulation
@@ -310,6 +332,9 @@ public class FakeGameClient extends GameClient{
 	public void simulateDead(){
 		if (getPlayer().getCharacter().isDead()){
 			//generate response here
+			ResponseDead response = new ResponseDead();
+			response.setData((int)getId());
+			getGame().addResponseForAllClients(response);
 		}
 	}
 	
@@ -327,6 +352,7 @@ public class FakeGameClient extends GameClient{
 		GameMode gm = getServer().createGame(Constants.GAMEMODE_DD);
 		getServer().addClientToGame(this, gm);
 		// generate response here
+		
 	}
 	
 	/** simulate collision. report the damage done on another player
@@ -334,17 +360,16 @@ public class FakeGameClient extends GameClient{
 	 */
 	public void simulateCollision(){
 		int damage = 1;
-		ArrayList<Character> characterList = new ArrayList<Character>();
-		for (Player player: getGame().getPlayers()){
-			if (player.getCharacter().getId() != getPlayer().getCharacter().getId())
-				characterList.add(player.getCharacter());
-		}
-		if (characterList.size() >= 1){
+		ArrayList<GameClient> list = new ArrayList<GameClient>(getGame().getClients().values());
+		list.remove(this);
+		if (list.size() >= 1){
 			// car collision should only happen when there are 2 cars or more
 			Random random = new Random();
-			int targetId = random.nextInt() % characterList.size();
+			int targetId = random.nextInt(list.size());
 			// generate response here
-			
+			ResponseCollision response = new ResponseCollision();
+			response.setData(damage);
+			list.get(targetId).addResponseForUpdate(response);
 		}
 	}
 	

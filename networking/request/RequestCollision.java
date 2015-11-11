@@ -3,20 +3,23 @@ package networking.request;
 import java.io.IOException;
 
 import networking.response.ResponseCollision;
+import utility.DataReader;
 
 public class RequestCollision extends GameRequest {
 
-	// Data
-	// Responses
-	private ResponseCollision responseCollision;
+	private int damage;
 
 	public RequestCollision() {
-		responses.add(responseCollision = new ResponseCollision());
+		super();
 	}
 
 	@Override
 	public void parse() throws IOException {
-
+		try {
+			damage = DataReader.readInt(dataInput);
+		}catch (Exception e){
+			e.printStackTrace();
+		}
 	}
 
 	@Override
