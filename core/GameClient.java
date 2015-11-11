@@ -70,6 +70,7 @@ public class GameClient extends Thread {
 		}
 		gamestate = Constants.GAMESTATE_NOT_LOGGED_IN;
 		player = new Player();
+		game = null;
 	}
 
 	/**

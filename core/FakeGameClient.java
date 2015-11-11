@@ -118,7 +118,9 @@ public class FakeGameClient extends GameClient{
 					lastActivity = System.currentTimeMillis();
 				}
 				if (System.currentTimeMillis() - heartbeatDelay > 33){	// 10 times per second
-					getGame().addResponseForAllClients(responses.remove());
+					GameResponse response = responses.poll();
+					if (response != null)
+						getGame().addResponseForAllClients(responses.remove());
 				}
 				//simulateRandomWithError();
 				this.sleep(1);	// this should let cpu 'rest' a bit
@@ -250,7 +252,10 @@ public class FakeGameClient extends GameClient{
 	public void simulateChat(){
 		ResponseChat response = new ResponseChat();
 		response.setData(getPlayer().getUsername(), "This is a chat msg");
-		getGame().addResponseForAllClients(response);
+		if (getGame() != null)
+			getGame().addResponseForAllClients(response);
+		else
+			getServer().addResponseForLobby(getId(), response);
 		System.out.printf(this.toString() + " sent chat\n");
 		// generate chat here
 	}
