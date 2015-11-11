@@ -126,7 +126,7 @@ public class Constants {
     public static final int SIMULATION_LOBBY_DELAY = 5; //seconds	// delay in lobby state
     public static final int SIMULATION_GAME_LOBBY_DELAY = 5;	// delay in game lobby state
     public static final int SIMULATION_GAME_DELAY = 3;		// delay in game play state
-    public static final int SIMULATION_GAME_TIME_OUT = 15;	//seconds. game will end if it has run for x seconds
+    public static final int SIMULATION_GAME_TIME_OUT = 600;	//seconds. game will end if it has run for x seconds
     
     // GAME MODE
     public static final int GAMEMODE_DD = 0;

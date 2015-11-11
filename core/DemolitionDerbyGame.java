@@ -4,6 +4,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import metadata.Constants;
+import networking.response.ResponseResults;
 
 public class DemolitionDerbyGame extends GameMode {
 
@@ -59,6 +60,9 @@ public class DemolitionDerbyGame extends GameMode {
 				}else{
 					// game finish. wait till all client get back to lobby then destroy game
 					// send results here
+					ResponseResults response = new ResponseResults();
+					response.setData(2);
+					addResponseForAllClients(response);
 					if (isEmpty()){
 						isRunning = false;
 						endGame();

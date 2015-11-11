@@ -19,6 +19,7 @@ import networking.response.ResponseLogin;
 import networking.response.ResponseMove;
 import networking.response.ResponsePowerUpPickUp;
 import networking.response.ResponsePowerUpUse;
+import networking.response.ResponseRemoveUser;
 
 public class FakeGameClient extends GameClient{
 	/** This class will be used to simulate GameClient
@@ -108,12 +109,16 @@ public class FakeGameClient extends GameClient{
 	public void run(){
 		isPlaying = true;
 		lastActivity = System.currentTimeMillis();
+		long heartbeatDelay = System.currentTimeMillis();
 		while (isPlaying){
 			try {
 				// player's simulating should go inside this scope
 				if (System.currentTimeMillis() - lastActivity > Constants.SIMULATION_LOBBY_DELAY * 1000){
 					simulateRandomWithoutError();
 					lastActivity = System.currentTimeMillis();
+				}
+				if (System.currentTimeMillis() - heartbeatDelay > 33){	// 10 times per second
+					getGame().addResponseForAllClients(responses.remove());
 				}
 				//simulateRandomWithError();
 				this.sleep(1);	// this should let cpu 'rest' a bit
@@ -181,6 +186,12 @@ public class FakeGameClient extends GameClient{
 	 */
 	public void simulateLogout() throws Exception{
 		getGame().removeClient(getId());
+		ResponseRemoveUser response = new ResponseRemoveUser();
+		response.setData(getPlayer().getUsername());
+		if (getGame() != null)
+			getGame().addResponseForAllClients(response);
+		else
+			getServer().addResponseForLobby(getId(), response);
 		System.out.printf(this.toString() + " log out\n");
 		isPlaying = false;	// stop run()
 	}
