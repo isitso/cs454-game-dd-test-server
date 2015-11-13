@@ -8,10 +8,9 @@ public class RequestRankings extends GameRequest {
 
 	// Data
 	// Responses
-	private ResponseRankings responseRankings;
 
 	public RequestRankings() {
-		responses.add(responseRankings = new ResponseRankings());
+		super();
 	}
 
 	@Override

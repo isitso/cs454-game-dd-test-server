@@ -7,7 +7,6 @@ public class RequestHeartbeat extends GameRequest {
 	 * Constructor
 	 */
 	public RequestHeartbeat() {
-		// TODO Auto-generated constructor stub
 		super();
 	}
 	

@@ -8,10 +8,8 @@ public class RequestResults extends GameRequest {
 
 	// Data
 	// Responses
-	private ResponseResults responseResults;
 
 	public RequestResults() {
-		responses.add(responseResults = new ResponseResults());
 	}
 
 	@Override

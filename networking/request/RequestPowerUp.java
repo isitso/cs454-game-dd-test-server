@@ -8,10 +8,9 @@ public class RequestPowerUp extends GameRequest {
 
 	// Data
 	// Responses
-	private ResponsePowerUpUse responsePowerUpUse;
 
 	public RequestPowerUp() {
-		responses.add(responsePowerUpUse = new ResponsePowerUpUse());
+		super();
 	}
 
 	@Override

@@ -12,7 +12,6 @@ public class RequestMove extends GameRequest {
 	 * 
 	 */
 	public RequestMove() {
-		// TODO Auto-generated constructor stub
 		super();
 	}
 	

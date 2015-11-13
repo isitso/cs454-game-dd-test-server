@@ -9,10 +9,9 @@ public class RequestPrizes extends GameRequest {
 
 	// Data
 	// Responses
-	private ResponsePrizes responsePrizes;
 
 	public RequestPrizes() {
-		responses.add(responsePrizes = new ResponsePrizes());
+		super();
 	}
 
 	@Override

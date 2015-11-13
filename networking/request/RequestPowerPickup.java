@@ -8,10 +8,9 @@ public class RequestPowerPickup extends GameRequest {
 
 	// Data
 	// Responses
-	private ResponsePowerUpPickUp responsePowerUpPickUp;
 
 	public RequestPowerPickup() {
-		responses.add(responsePowerUpPickUp = new ResponsePowerUpPickUp());
+		super();
 	}
 
 	@Override

@@ -8,10 +8,9 @@ public class RequestHealth extends GameRequest {
 
 	// Data
 	// Responses
-	private ResponseHealth responseHealth;
 
 	public RequestHealth() {
-		responses.add(responseHealth = new ResponseHealth());
+		super();
 	}
 
 	@Override

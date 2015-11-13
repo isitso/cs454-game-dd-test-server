@@ -8,10 +8,9 @@ public class RequestDead extends GameRequest {
 
 	// Data
 	// Responses
-	private ResponseDead responseDead;
 
 	public RequestDead() {
-		responses.add(responseDead = new ResponseDead());
+		super();
 	}
 
 	@Override

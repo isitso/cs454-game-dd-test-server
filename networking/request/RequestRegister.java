@@ -11,7 +11,6 @@ public class RequestRegister extends GameRequest {
 	String username, pwd;
 
 	public RequestRegister() {
-		// TODO Auto-generated constructor stub
 		super();
 	}
 

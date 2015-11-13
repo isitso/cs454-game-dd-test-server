@@ -16,7 +16,6 @@ import core.Player;
 public class RequestLogin extends GameRequest {
 	String username, pwd;
 	public RequestLogin() {
-		// TODO Auto-generated constructor stub
 		super();
 	}
 

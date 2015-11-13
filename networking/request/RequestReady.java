@@ -7,6 +7,7 @@ import networking.response.ResponseResults;
 
 public class RequestReady extends GameRequest {
 	public RequestReady() {
+		super();
 	}
 
 	@Override
