@@ -23,7 +23,7 @@ public class ResponseRankings extends GameResponse {
     	for (Player player: list){
     		// testing purpose: score = 1
     		packet.addString(player.getUsername());
-    		packet.addInt32(1);
+    		packet.addInt32(player.getCharacter().getScore());
     	}
         return packet.getBytes();
     }

@@ -6,16 +6,13 @@ import networking.response.ResponseDead;
 
 public class RequestDead extends GameRequest {
 
-	// Data
-	// Responses
-
 	public RequestDead() {
 		super();
 	}
 
 	@Override
 	public void parse() throws IOException {
-
+		// nothing to parse
 	}
 
 	@Override
@@ -25,6 +22,10 @@ public class RequestDead extends GameRequest {
 		 * The client tells the server that it’s has died and the server
 		 * response to all the other users in the lobby with ResponseDead
 		 */
-
+		if (client.getGame() == null)
+			throw new Exception("Client has no game.");
+		ResponseDead response = new ResponseDead();
+		response.setData(client.getPlayer().getUsername());
+		client.getGame().addResponseForAllClients(response);
 	}
 }

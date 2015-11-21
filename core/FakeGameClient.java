@@ -234,7 +234,7 @@ public class FakeGameClient extends GameClient{
 			// generate response here
 			ResponseMove response = new ResponseMove();
 			response.setMove(getPlayer().getUsername(), x, y, getPlayer().getCharacter().getZ(),
-					getPlayer().getCharacter().getH());
+					getPlayer().getCharacter().getH(), getPlayer().getCharacter().getP(), getPlayer().getCharacter().getR(), "");
 			responses.add(response);	// add to queue. later use queue to add to all clients
 		}
 	}
@@ -349,7 +349,7 @@ public class FakeGameClient extends GameClient{
 		if (getPlayer().getCharacter().isDead()){
 			//generate response here
 			ResponseDead response = new ResponseDead();
-			response.setData((int)getId());
+			response.setData(getPlayer().getUsername());
 			getGame().addResponseForAllClients(response);
 		}
 	}
@@ -384,7 +384,7 @@ public class FakeGameClient extends GameClient{
 			int targetId = random.nextInt(list.size());
 			// generate response here
 			ResponseCollision response = new ResponseCollision();
-			response.setData(damage);
+			response.setData(list.get(targetId).getPlayer().getUsername(), damage);
 			list.get(targetId).addResponseForUpdate(response);
 		}
 	}

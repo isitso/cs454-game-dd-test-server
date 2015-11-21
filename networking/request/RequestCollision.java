@@ -7,7 +7,7 @@ import networking.response.ResponseCollision;
 import utility.DataReader;
 
 public class RequestCollision extends GameRequest {
-	private int playerId;
+	private String username;
 	private int damage;
 
 	public RequestCollision() {
@@ -17,7 +17,7 @@ public class RequestCollision extends GameRequest {
 	@Override
 	public void parse() throws IOException {
 		try {
-			playerId = DataReader.readInt(dataInput);
+			username = DataReader.readString(dataInput);
 			damage = DataReader.readInt(dataInput);
 		}catch (Exception e){
 			e.printStackTrace();
@@ -34,6 +34,8 @@ public class RequestCollision extends GameRequest {
 		 * Damage=(base_damage×weight_modifier×speed
 		 * modifier×inflicting_part)/(receiving_part)
 		 */
-		GameClient target = 
+		ResponseCollision response = new ResponseCollision();
+		response.setData(username, damage);
+		client.getGame().addResponseForAllClientsExcept(client.getId(), response);
 	}
 }

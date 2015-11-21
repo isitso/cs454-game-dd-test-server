@@ -19,9 +19,11 @@ public class RequestPowerPickup extends GameRequest {
 
 	@Override
 	public void doBusiness() throws Exception {
+		if (client.getGame() == null)
+			throw new Exception("Client has no game");
 		// test purpose: ignore validation
 		ResponsePowerUpPickUp response = new ResponsePowerUpPickUp();
-		response.setData(1);
+		response.setData(client.getPlayer().getUsername(), powerId);
 		responses.add(response);
 	}
 }

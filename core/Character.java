@@ -13,6 +13,8 @@ public class Character {
 	String name;
 	int health;
 	int place;
+	int paintId, tireId;
+	int score;
 	float x, y, z, h, p, r;	// xyz is for position. hpr is for hpr
 	HashMap<Integer, Integer> powerMap = new HashMap<Integer, Integer>();
 	
@@ -69,10 +71,30 @@ public class Character {
 	public int getTypeId() {
 		return typeId;
 	}
+	
+	
+	public int getPaintId() {
+		return paintId;
+	}
+	public void setPaintId(int paintId) {
+		this.paintId = paintId;
+	}
+	public int getTireId() {
+		return tireId;
+	}
+	public void setTireId(int tireId) {
+		this.tireId = tireId;
+	}
 	public void setTypeId(int typeId) {
 		this.typeId = typeId;
 	}
 
+	public int getScore() {
+		return score;
+	}
+	public void setScore(int score) {
+		this.score = score;
+	}
 	/**
 	 * set position x y z at the same time
 	 */

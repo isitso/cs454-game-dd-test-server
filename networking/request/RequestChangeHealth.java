@@ -7,15 +7,14 @@ import utility.DataReader;
 
 public class RequestChangeHealth extends GameRequest {
 
-	private String userName;
 	private int healthChange;
+	
 	public RequestChangeHealth() {
 		super();
 	}
 
 	@Override
 	public void parse() throws IOException {
-		userName = DataReader.readString(dataInput);
 		healthChange = DataReader.readInt(dataInput);
 	}
 
@@ -27,6 +26,11 @@ public class RequestChangeHealth extends GameRequest {
 		 * being dealt to and how much. The server responds by updating all
 		 * health bars involved through ResponseChangeHealth.
 		 */
-
+		if (client.getGame() == null)
+			throw new Exception("Client has no game.");
+		client.getPlayer().getCharacter().setHealth(client.getPlayer().getCharacter().getHealth() + healthChange);
+		ResponseChangeHealth response = new ResponseChangeHealth();
+		response.setData(client.getPlayer().getUsername(), healthChange);
+		client.getGame().addResponseForAllClients(response);
 	}
 }

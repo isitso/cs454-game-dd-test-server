@@ -17,6 +17,7 @@ public abstract class GameMode extends Thread {
 	protected boolean isRunning;
 	protected GameServer server;
 	protected int gamestate;
+	protected ArrayList<Integer> powerList = new ArrayList<Integer>();
 	
 	/** Start the game (dd or rr)
 	 * 
@@ -86,6 +87,13 @@ public abstract class GameMode extends Thread {
 		}
 	}
 
+	public void addResponseForAllClientsExcept(long clientId, GameResponse response){
+
+		for (GameClient client: clients.values()){
+			if (client.getId() != clientId)
+			client.addResponseForUpdate(response);
+		}
+	}
 	public ArrayList<Player> getPlayers(){
 		ArrayList<Player> list = new ArrayList<Player>();
 		for (GameClient client: clients.values())

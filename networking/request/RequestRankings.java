@@ -15,7 +15,7 @@ public class RequestRankings extends GameRequest {
 
 	@Override
 	public void parse() throws IOException {
-
+		// nothing to parse
 	}
 
 	@Override

@@ -4,8 +4,8 @@ import metadata.Constants;
 import utility.GamePacket;
 
 public class ResponseMove extends GameResponse {
-	String username;
-	float x, y, z, h;
+	String username, keys;
+	float x, y, z, h, p, r;
 	/**
 	 * constructor. set response code
 	 */
@@ -26,6 +26,9 @@ public class ResponseMove extends GameResponse {
         packet.addFloat(y);
         packet.addFloat(z);
         packet.addFloat(h);
+        packet.addFloat(p);
+        packet.addFloat(r);
+        packet.addString(keys);
         return packet.getBytes();
     }
     
@@ -40,12 +43,15 @@ public class ResponseMove extends GameResponse {
      * @param r
      */
     public void setMove(String name, float x, float y, float z,
-    		float h){
+    		float h, float p, float r, String keys){
     	// sets the info
     	username = name;
     	this.x = x;
     	this.y = y;
     	this.z = z;
     	this.h = h;
+    	this.p = p;
+    	this.r = r;
+    	this.keys = keys;
     }
 }

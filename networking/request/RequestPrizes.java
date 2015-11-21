@@ -16,7 +16,7 @@ public class RequestPrizes extends GameRequest {
 
 	@Override
 	public void parse() throws IOException {
-
+		// nothing to parse
 	}
 
 	@Override
@@ -26,6 +26,6 @@ public class RequestPrizes extends GameRequest {
 		 * At the end of the gamemode the user requests a prize from the server
 		 * and the server responses with a prize based on the user’s rank.
 		 */
-
+		
 	}
 }

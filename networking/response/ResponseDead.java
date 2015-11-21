@@ -5,7 +5,7 @@ import metadata.Constants;
 import utility.GamePacket;
 
 public class ResponseDead extends GameResponse {
-	int playerId;
+	private String username;
     public ResponseDead() {
         responseCode = Constants.SMSG_DEAD;
     }
@@ -14,11 +14,11 @@ public class ResponseDead extends GameResponse {
     public byte[] constructResponseInBytes() {
         GamePacket packet = new GamePacket(responseCode);
       /*Construct packet*/
-        packet.addInt32(playerId);
+        packet.addString(username);
         return packet.getBytes();
     }
     
-    public void setData(int playerId){
-    	this.playerId = playerId;
+    public void setData(String username){
+    	this.username = username;
     }
 }

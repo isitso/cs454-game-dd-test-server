@@ -1,6 +1,7 @@
 package networking.response;
 
 import metadata.Constants;
+import utility.GamePacket;
 
 public class ResponseRemoveUser extends GameResponse {
 
@@ -10,8 +11,9 @@ public class ResponseRemoveUser extends GameResponse {
 	}
 	@Override
 	public byte[] constructResponseInBytes() {
-		// TODO Auto-generated method stub
-		return null;
+		GamePacket packet = new GamePacket(responseCode);
+		packet.addString(username);
+		return packet.getBytes();
 	}
 
 	public void setData(String username){
