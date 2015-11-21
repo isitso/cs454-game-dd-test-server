@@ -13,7 +13,7 @@ public abstract class GameMode extends Thread {
 	
 	protected HashMap<Long, GameClient> clients = new HashMap<Long, GameClient>();
 	//protected HashMap<Long, Player> players = new HashMap<Long, Player>();
-	public final static int MAX_PLAYER_COUNT = 2;
+	public final static int MAX_PLAYER_COUNT = 10;
 	protected boolean isRunning;
 	protected GameServer server;
 	protected int gamestate;

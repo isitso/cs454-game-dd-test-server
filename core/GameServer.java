@@ -119,6 +119,7 @@ public class GameServer {
 			}
 		}
 		try {
+			
 			// Start to listen on the given port for incoming connections
 			listenSocket = new ServerSocket(serverPort);
 			System.out.println("Server has started on port: "
@@ -137,7 +138,23 @@ public class GameServer {
 					GameClient client = new GameClient(clientSocket, this);
 					// Run the thread
 					client.start();
-					activeThreads.put(client.getId(), client);
+//					activeThreads.put(client.getId(), client);
+					// find an available game to add the client
+					boolean foundGame = false;
+					for (GameMode game : games.values()){
+						if (!game.isFull()){
+							game.addClient(client.getId(), client);
+							foundGame = true;
+							System.out.println("Real client added to game " + game);
+							break;
+						}
+					}
+					if (!foundGame){
+						// create new game 
+						DemolitionDerbyGame g = new DemolitionDerbyGame(this);
+						games.put(g.getId(), g);
+						System.out.println("Created game " + g + ". Real client added.");
+					}
 				} catch (IOException e) {
 					System.out.println(e.getMessage());
 				}
