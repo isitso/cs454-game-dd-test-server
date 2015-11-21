@@ -4,10 +4,10 @@ package networking.response;
 import metadata.Constants;
 import utility.GamePacket;
 
-public class ResponseHealth extends GameResponse {
+public class ResponseChangeHealth extends GameResponse {
 	String username;
 	int health;
-    public ResponseHealth() {
+    public ResponseChangeHealth() {
         responseCode = Constants.SMSG_HEALTH;
     }
 

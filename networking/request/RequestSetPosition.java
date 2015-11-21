@@ -2,15 +2,14 @@ package networking.request;
 
 import java.io.IOException;
 
-import metadata.Constants;
-import networking.response.ResponseReady;
+import networking.response.ResponseSetPosition;
 
+public class RequestSetPosition extends GameRequest {
 
-public class RequestReady extends GameRequest {
-	public RequestReady() {
+	public RequestSetPosition() {
 		super();
 	}
-
+	
 	@Override
 	public void parse() throws IOException {
 		// nothing to parse
@@ -19,9 +18,8 @@ public class RequestReady extends GameRequest {
 	@Override
 	public void doBusiness() throws Exception {
 		if (client.getGame() != null){
-			client.setGamestate(Constants.GAMESTATE_GAME_READY);
-			ResponseReady response = new ResponseReady();
-			response.setData(client.getGame());
+			ResponseSetPosition response = new ResponseSetPosition();
+			response.setData(client.getGame().getPlayers());
 			client.getGame().addResponseForAllClients(response);
 		}
 	}

@@ -26,9 +26,9 @@ public class GameRequestTable {
         add(Constants.CMSG_CREATE_CHARACTER, "RequestCreateCharacter");
         add(Constants.CMSG_CHAT, "RequestChat");
         add(Constants.CMSG_MOVE, "RequestMove");
-        add(Constants.CMSG_POWER_UP, "RequestPowerUp");
+        add(Constants.CMSG_POWER_UP, "RequestPowerUpUse");
         add(Constants.CMSG_POWER_PICKUP, "RequestPowerPickup");
-        add(Constants.CMSG_HEALTH, "RequestHealth");
+        add(Constants.CMSG_HEALTH, "RequestChangeHealth");
         add(Constants.CMSG_RESULTS, "RequestResults");
         add(Constants.CMSG_RANKINGS, "RequestRankings");
         add(Constants.CMSG_PRIZES, "RequestPrizes");
@@ -36,7 +36,7 @@ public class GameRequestTable {
         add(Constants.CMSG_DEAD, "RequestDead");
         add(Constants.CMSG_READY, "RequestReady");
         add(Constants.CMSG_DISCONNECT, "RequestDisconnect");
-        
+        add(Constants.CMSG_SET_POSITION, "RequestSetPosition");
         add(Constants.REQ_HEARTBEAT, "RequestHeartbeat");
     }
 

@@ -6,7 +6,7 @@ import utility.GamePacket;
 
 public class ResponsePowerUpUse extends GameResponse {
 	String username;
-	int validate;
+	int powerId;
     public ResponsePowerUpUse() {
         responseCode = Constants.SMSG_POWER_UP;
     }
@@ -16,12 +16,12 @@ public class ResponsePowerUpUse extends GameResponse {
         GamePacket packet = new GamePacket(responseCode);
       /*Construct packet*/
         packet.addString(username);
-        packet.addInt32(validate);
+        packet.addInt32(powerId);
         return packet.getBytes();
     }
     
-    public void setData(String name, int validate){
+    public void setData(String name, int powerId){
     	username = name;
-    	this.validate = validate;
+    	this.powerId = powerId;
     }
 }

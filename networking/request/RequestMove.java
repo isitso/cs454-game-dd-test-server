@@ -46,6 +46,6 @@ public class RequestMove extends GameRequest {
     	response.setMove(client.getPlayer().getCharacter().getName(), x, y, z, h);
     	// send to other players
     	if (client.getGame() != null)
-    	client.getGame().addResponseForAllClients(response);
+    		client.getGame().addResponseForAllClients(response);
     }
 }

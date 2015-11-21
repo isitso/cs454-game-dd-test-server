@@ -2,20 +2,21 @@ package networking.request;
 
 import java.io.IOException;
 
-import networking.response.ResponseHealth;
+import networking.response.ResponseChangeHealth;
+import utility.DataReader;
 
-public class RequestHealth extends GameRequest {
+public class RequestChangeHealth extends GameRequest {
 
-	// Data
-	// Responses
-
-	public RequestHealth() {
+	private String userName;
+	private int healthChange;
+	public RequestChangeHealth() {
 		super();
 	}
 
 	@Override
 	public void parse() throws IOException {
-
+		userName = DataReader.readString(dataInput);
+		healthChange = DataReader.readInt(dataInput);
 	}
 
 	@Override

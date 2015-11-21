@@ -12,6 +12,7 @@ public class Character {
 	int typeId;	// determine which model to use
 	String name;
 	int health;
+	int place;
 	float x, y, z, h, p, r;	// xyz is for position. hpr is for hpr
 	HashMap<Integer, Integer> powerMap = new HashMap<Integer, Integer>();
 	
@@ -81,6 +82,12 @@ public class Character {
 		this.z = z;
 	}
 	
+	public int getPlace() {
+		return place;
+	}
+	public void setPlace(int place) {
+		this.place = place;
+	}
 	/**
 	 * set hpr
 	 */

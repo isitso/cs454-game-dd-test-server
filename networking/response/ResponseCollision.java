@@ -5,7 +5,7 @@ import metadata.Constants;
 import utility.GamePacket;
 
 public class ResponseCollision extends GameResponse {
-	int damage;
+	private int damage;
     public ResponseCollision() {
         responseCode = Constants.SMSG_COLLISION;
     }
