@@ -39,7 +39,7 @@ public class DemolitionDerbyGame extends GameMode {
 	@Override
 	public void run(){
 		// check if all game ready before countdown
-		long startTime = System.currentTimeMillis();
+		startTime = System.currentTimeMillis();
 		long currentTime = 0;
 		isRunning = true;
 		gamestate = Constants.GAMEMODE_STATE_PLAY;

@@ -17,7 +17,7 @@ public abstract class GameMode extends Thread {
 	protected GameServer server;
 	protected int gamestate;
 	protected ArrayList<Integer> powerList = new ArrayList<Integer>();
-	
+	protected long startTime, elapsedTime;
 	/** Start the game (dd or rr)
 	 * 
 	 */

@@ -14,7 +14,7 @@ public class Character {
 	int health;
 	int place;
 	int paintId, tireId;
-	int score;
+	int score, rank;
 	float x, y, z, h, p, r;	// xyz is for position. hpr is for hpr
 	HashMap<Integer, Integer> powerMap = new HashMap<Integer, Integer>();
 	
@@ -94,6 +94,13 @@ public class Character {
 	}
 	public void setScore(int score) {
 		this.score = score;
+	}
+		
+	public int getRank() {
+		return rank;
+	}
+	public void setRank(int rank) {
+		this.rank = rank;
 	}
 	/**
 	 * set position x y z at the same time

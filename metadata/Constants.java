@@ -32,6 +32,7 @@ public class Constants {
     public final static short CMSG_DEAD = 126; 
     public final static short CMSG_READY = 127; 
     public final static short CMSG_SET_POSITION = 128;
+    public final static short CMSG_SET_RANK = 130;
     public final static short REQ_HEARTBEAT = 301; 
     
     
@@ -62,6 +63,9 @@ public class Constants {
     public final static short SMSG_DEAD = 226; 
     public final static short SMSG_READY = 227; 
     public final static short SMSG_SET_POSITION = 228;
+    public final static short SMSG_TIME = 229;
+    public final static short SMSG_SET_RANK = 230;
+    public final static short SMSG_SET_READY = 231;
     public final static short SMSG_RENDER_CHARACTER = 310;
     public final static short SMSG_REMOVE_CHARACTER = 311; 
 
