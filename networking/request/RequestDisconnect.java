@@ -4,7 +4,6 @@ package networking.request;
 import java.io.IOException;
 
 import metadata.Constants;
-import networking.response.ResponseDisconnect;
 import networking.response.ResponseRemoveUser;
 
 public class RequestDisconnect extends GameRequest {

@@ -13,7 +13,6 @@ public abstract class GameMode extends Thread {
 	
 	protected HashMap<Long, GameClient> clients = new HashMap<Long, GameClient>();
 	//protected HashMap<Long, Player> players = new HashMap<Long, Player>();
-	public final static int MAX_PLAYER_COUNT = 10;
 	protected boolean isRunning;
 	protected GameServer server;
 	protected int gamestate;
@@ -39,11 +38,11 @@ public abstract class GameMode extends Thread {
 		if (gamestate != Constants.GAMEMODE_STATE_LOBBY)
 			throw new Exception("Game is already in process.");
 		synchronized (clients){
-			if (clients.size() >= MAX_PLAYER_COUNT)
+			if (clients.size() >= Constants.GAMEMODE_MAX_PLAYER_COUNT)
 				throw new Exception("Game is full.");
 			clients.put(id, client);
 			// testing purpose. start game right after full
-			if (clients.size() == MAX_PLAYER_COUNT)
+			if (clients.size() == Constants.GAMEMODE_MAX_PLAYER_COUNT)
 				startGame();
 		}
 	}
@@ -122,7 +121,7 @@ public abstract class GameMode extends Thread {
 	}
 	
 	public boolean isFull(){
-		return clients.size() >= MAX_PLAYER_COUNT;
+		return clients.size() >= Constants.GAMEMODE_MAX_PLAYER_COUNT;
 	}
 	
 	public boolean isEmpty(){

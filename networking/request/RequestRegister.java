@@ -1,9 +1,6 @@
 package networking.request;
 
 import java.io.IOException;
-import java.sql.*;
-
-import metadata.Constants;
 import networking.response.ResponseRegister;
 import utility.DataReader;
 

@@ -23,7 +23,6 @@ import networking.request.GameRequest;
 import networking.response.GameResponse;
 import utility.DataReader;
 
-import java.sql.*;
 
 /**
  * The GameClient class is an extension of the Thread class that represents an

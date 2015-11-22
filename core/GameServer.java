@@ -149,6 +149,7 @@ public class GameServer {
 							break;
 						}
 					}
+					// if there is no available game to join
 					if (!foundGame){
 						// create new game 
 						DemolitionDerbyGame g = new DemolitionDerbyGame(this);

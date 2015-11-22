@@ -3,15 +3,11 @@ package networking.request;
 import java.io.IOException;
 
 import utility.DataReader;
-import utility.GamePacket;
 
-import java.sql.*;
 import java.util.ArrayList;
 
-import metadata.Constants;
 import networking.response.ResponseLogin;
 import core.Character;
-import core.Player;
 
 public class RequestLogin extends GameRequest {
 	String username, pwd;

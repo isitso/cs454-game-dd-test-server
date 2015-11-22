@@ -15,7 +15,6 @@ import networking.response.GameResponse;
 import networking.response.ResponseChat;
 import networking.response.ResponseCollision;
 import networking.response.ResponseDead;
-import networking.response.ResponseLogin;
 import networking.response.ResponseMove;
 import networking.response.ResponsePowerUpPickUp;
 import networking.response.ResponsePowerUpUse;
@@ -282,6 +281,9 @@ public class FakeGameClient extends GameClient{
 	 * 
 	 */
 	public void simulatePowerPickup(){
+		ResponsePowerUpPickUp response = new ResponsePowerUpPickUp();
+		response.setData(getPlayer().getUsername(), 1);
+		getGame().addResponseForAllClients(response);
 		System.out.printf(this.toString() + " pick up item\n");
 	}
 	

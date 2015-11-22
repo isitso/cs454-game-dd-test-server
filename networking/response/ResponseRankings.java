@@ -28,7 +28,7 @@ public class ResponseRankings extends GameResponse {
         return packet.getBytes();
     }
     
-    void setData(GameMode game){
+    public void setData(GameMode game){
     	this.game = game;
     }
 }

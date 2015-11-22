@@ -2,7 +2,6 @@ package networking.request;
 
 import java.io.IOException;
 
-import core.GameClient;
 import networking.response.ResponseChat;
 import metadata.Constants;
 import utility.DataReader;

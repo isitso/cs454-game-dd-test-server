@@ -18,7 +18,7 @@ public class ResponsePrizes extends GameResponse {
         return packet.getBytes();
     }
     
-    void setData(int itemId){
+    public void setData(int itemId){
     	this.itemId = itemId;
     }
 }

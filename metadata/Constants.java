@@ -138,4 +138,5 @@ public class Constants {
     public static final int GAMEMODE_STATE_COUNTDOWN = 2;	// game is counting down
     public static final int GAMEMODE_STATE_PLAY = 3;		// game is in process
     public static final int GAMEMODE_STATE_ENDED = 4;		// game has ended
+    public static final int GAMEMODE_MAX_PLAYER_COUNT = 10;
 }

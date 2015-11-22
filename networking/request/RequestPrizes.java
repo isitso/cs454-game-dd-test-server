@@ -26,6 +26,9 @@ public class RequestPrizes extends GameRequest {
 		 * At the end of the gamemode the user requests a prize from the server
 		 * and the server responses with a prize based on the user’s rank.
 		 */
-		
+		// TEST purpose
+		ResponsePrizes response = new ResponsePrizes();
+		response.setData(1);
+		responses.add(response);
 	}
 }

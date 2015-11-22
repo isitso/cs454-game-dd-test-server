@@ -1,7 +1,6 @@
 package networking.request;
 
 import java.io.IOException;
-
 import networking.response.ResponseRankings;
 
 public class RequestRankings extends GameRequest {
@@ -25,6 +24,8 @@ public class RequestRankings extends GameRequest {
 		 * The client requests the status for all the other players in the
 		 * lobby.
 		 */
-
+		ResponseRankings response = new ResponseRankings();
+		response.setData(client.getGame());
+		client.getGame().addResponseForAllClients(response);
 	}
 }
