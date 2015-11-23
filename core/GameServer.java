@@ -331,7 +331,9 @@ public class GameServer {
 		try {
 			game.addClient(client.getId(), client);
 			client.setGame(game);
-			client.setGamestate(Constants.GAMESTATE_GAME_WAITING);
+			//client.setGamestate(Constants.GAMESTATE_GAME_WAITING);
+			//TESt: play game right away
+			client.setGamestate(Constants.GAMESTATE_GAME_PLAYING);
 			synchronized (lobbyClients) {
 				lobbyClients.remove(client.getId());
 			}

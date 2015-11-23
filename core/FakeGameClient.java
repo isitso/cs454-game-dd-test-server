@@ -19,6 +19,7 @@ import networking.response.ResponseMove;
 import networking.response.ResponsePowerUpPickUp;
 import networking.response.ResponsePowerUpUse;
 import networking.response.ResponseRemoveUser;
+import networking.response.ResponseRenderCharacter;
 
 public class FakeGameClient extends GameClient{
 	/** This class will be used to simulate GameClient
@@ -64,7 +65,7 @@ public class FakeGameClient extends GameClient{
 		
 		// just logged in. strolling in lobby
 		lobbyMethodIndexes.add(1);	//chat
-		lobbyMethodIndexes.add(10);	// create game
+		//lobbyMethodIndexes.add(10);	// create game
 		lobbyMethodIndexes.add(2);	// join game
 		if (Constants.SIMULATION_AUTO_LOGOUT)
 			lobbyMethodIndexes.add(3);	// log out
@@ -206,6 +207,13 @@ public class FakeGameClient extends GameClient{
 		for (GameMode game: getServer().getGameList()){
 			if (!game.isFinished() && !game.isRunning() && !game.isFull()){
 				getServer().addClientToGame(this, game);
+				// Testing
+				ResponseRenderCharacter response = new ResponseRenderCharacter();
+				response.setData(getPlayer().getUsername(),
+						getPlayer().getCharacter().getTypeId(),
+						getPlayer().getCharacter().getPaintId(),
+						getPlayer().getCharacter().getTireId());
+				getGame().addResponseForAllClients(response);
 				return;
 			}
 		}
